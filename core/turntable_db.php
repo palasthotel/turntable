@@ -6,7 +6,7 @@ require_once '../turntable_master.php';
  *
  * @author Paul Vorbach
  */
-abstract class turntable_db {
+class turntable_db {
   private $connection;
   private $author;
   private $prefix;
