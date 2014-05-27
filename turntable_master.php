@@ -1,4 +1,12 @@
 <?php
+// name of the master node info table
+// (used to store information about nodes that have been pushed by a client)
+define('TT_MASTER_NODE_INFO', 'tt_master_node_info');
+
+// name of the master node info table
+// (used to store information about pull behavior)
+define('TT_MASTER_NODE_PULL', 'tt_master_node_pull');
+
 /**
  * Main class of the Turntable Master.
  *
@@ -85,7 +93,7 @@ class turntable_master {
             'description' => t('Origin author user name.')
           ),
           'last_sync' => array(
-            'type' => 'datetime',
+            'type' => 'datetime:normal',
             'not null' => TRUE,
             'description' => t('Time of last sync.')
           ),
@@ -126,12 +134,12 @@ class turntable_master {
             'description' => t('ID of the client that did the pull.')
           ),
           'first_sync' => array(
-            'type' => 'datetime',
+            'type' => 'datetime:normal',
             'not null' => TRUE,
             'description' => t('Time of first pull.')
           ),
           'last_sync' => array(
-            'type' => 'datetime',
+            'type' => 'datetime:normal',
             'not null' => TRUE,
             'description' => t('Time of most recent pull.')
           )
@@ -168,6 +176,6 @@ class turntable_master {
    * Uninstalls the module.
    */
   public function uninstall() {
-    // TODO what to do here?
+    // nothing to do yet
   }
 }
