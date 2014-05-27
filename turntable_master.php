@@ -156,9 +156,9 @@ class turntable_master {
    * Installs the module.
    */
   public function install() {
-    $shard_type = array(
-      'type' => 'shard',
-      'name' => t('Shard'),
+    $shared_type = array(
+      'type' => 'shared',
+      'name' => t('Shared'),
       'base' => 'node_content',
       'description' => t('Shared content between different Drupal installations. Used by Turntable.'),
       'custom' => TRUE,
@@ -166,9 +166,9 @@ class turntable_master {
       'locked' => TRUE
     );
 
-    $shard_type = node_type_set_defaults($shard_type);
-    node_type_save($shard_type);
-    node_add_body_field($shard_type);
+    $shared_type = node_type_set_defaults($shared_type);
+    node_type_save($shared_type);
+    node_add_body_field($shared_type);
 
     // TODO init db (probably with InnoDB foreign key settings)
   }
