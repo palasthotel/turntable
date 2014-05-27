@@ -13,6 +13,7 @@ define('TT_MASTER_NODE_PULL', 'tt_master_node_pull');
  * @author Paul Vorbach
  */
 class turntable_master {
+
   /**
    * Creates the new Turntable Master.
    */
@@ -93,7 +94,7 @@ class turntable_master {
             'description' => t('Origin author user name.')
           ),
           'last_sync' => array(
-            'type' => 'datetime:normal',
+            'mysql_type' => 'DATETIME', // for some reason, type=datetime won't work
             'not null' => TRUE,
             'description' => t('Time of last sync.')
           ),
@@ -134,12 +135,12 @@ class turntable_master {
             'description' => t('ID of the client that did the pull.')
           ),
           'first_sync' => array(
-            'type' => 'datetime:normal',
+            'mysql_type' => 'DATETIME',
             'not null' => TRUE,
             'description' => t('Time of first pull.')
           ),
           'last_sync' => array(
-            'type' => 'datetime:normal',
+            'mysql_type' => 'DATETIME',
             'not null' => TRUE,
             'description' => t('Time of most recent pull.')
           )

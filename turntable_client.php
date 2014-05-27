@@ -9,7 +9,6 @@ class turntable_client {
    * Creates the new Turntable Client.
    */
   public function __construct() {
-    // TODO require_once 'classes/bootstrap.php';
   }
 
   /**
@@ -69,7 +68,7 @@ class turntable_client {
             'description' => t('Original node version ID.')
           ),
           'last_sync' => array(
-            'type' => 'datetime',
+            'mysql_type' => 'DATETIME',
             'not null' => TRUE,
             'description' => t('Time of last sync.')
           )
@@ -93,5 +92,8 @@ class turntable_client {
    */
   public function uninstall() {
     // TODO what to do here?
+  }
+
+  public function sendNode($node, $form, &$form_state) {
   }
 }
