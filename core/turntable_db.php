@@ -1,6 +1,11 @@
 <?php
 require_once '../turntable_master.php';
 
+/**
+ * Database wrapper.
+ *
+ * @author Paul Vorbach
+ */
 abstract class turntable_db {
   private $connection;
   private $author;
