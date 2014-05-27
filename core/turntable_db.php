@@ -1,6 +1,4 @@
 <?php
-require_once '../turntable_master.php';
-
 /**
  * Database wrapper.
  *
