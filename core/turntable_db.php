@@ -237,7 +237,7 @@ class turntable_db {
          '` (`nid`, `shared_state`) VALUES (' . $nid . ',' . $shared_state .
          ') ON DUPLICATE KEY UPDATE `shared_state`=' . $shared_state . ';';
 
-    $this->connection->query($query);
+    $result = $this->connection->query($query);
   }
 
   public function getSharedState($nid) {
@@ -246,6 +246,12 @@ class turntable_db {
 
     $result = $this->connection->query($query);
 
-    debug($result, NULL, TRUE);
+    if (!$result) {
+      return 0; // default
+    }
+
+    $row = $result->fetch_assoc();
+
+    return $row['shared_state'];
   }
 }

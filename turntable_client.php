@@ -75,8 +75,11 @@ class turntable_client {
     // TODO what to do here?
   }
 
-  public function pushNode($node) {
-    $master_url = $this->getMasterUrl();
-    http_post_fields($master_url, $node);
+  public function setSharedState($nid, $shared_state) {
+    $query = 'INSERT INTO `' . $this->prefix . self::TABLE_CLIENT_INFO .
+         '` (`nid`, `shared_state`) VALUES (' . $nid . ',' . $shared_state .
+         ') ON DUPLICATE KEY UPDATE `shared_state`=' . $shared_state . ';';
+
+    $result = $this->getDB()->getConnection()->query($query);
   }
 }
