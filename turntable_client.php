@@ -12,6 +12,7 @@ class turntable_client {
   const SYNC_NONE = 0;
   const SYNC_COPY = 1;
   const SYNC_REF = 2;
+  const SYNC_ORIG = 3;
 
   private static $instance = NULL;
 
@@ -35,6 +36,10 @@ class turntable_client {
     }
 
     return self::$instance;
+  }
+
+  public function getDB() {
+    return $this->db;
   }
 
   /**
@@ -67,10 +72,6 @@ class turntable_client {
    */
   public function uninstall() {
     // TODO what to do here?
-  }
-
-  public function getMasterUrl() {
-    return $this->master_url;
   }
 
   public function pushNode($node) {
