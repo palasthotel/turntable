@@ -9,11 +9,12 @@ require_once './sites/all/libraries/turntable/core/turntable_db.php';
  */
 class turntable_client {
   // possible SYNC states
-  const SYNC_NONE = 0;
-  const SYNC_COPY = 1;
-  const SYNC_REF = 2;
-  const SYNC_ORIG = 3;
+  const SHARED_NONE = 0; // not shared
+  const SHARED_COPY = 1; // copy of a node on the master
+  const SHARED_REF = 2; // reference to a node on the master
+  const SHARED_ORIG = 3; // original node (changes will be sent to master)
 
+  // instance field
   private static $instance = NULL;
 
   private $db;
