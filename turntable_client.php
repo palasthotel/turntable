@@ -1,14 +1,41 @@
 <?php
+require_once './core/singleton.php';
+require_once './core/turntable_db.php';
+
 /**
  * Main class of the Turntable Client.
+ * (Singleton)
  *
  * @author Paul Vorbach
  */
 class turntable_client {
+  // possible SYNC states
+  const SYNC_NONE = 0;
+  const SYNC_COPY = 1;
+  const SYNC_REF = 2;
+
+  private static $instance = NULL;
+
+  private $db;
+
   /**
    * Creates the new Turntable Client.
    */
-  public function __construct() {
+  private function __construct() {
+    $db_conn = Database::getConnection();
+    $db_opts = $db_conn['connectionOptions'];
+
+    // use custom db connection
+    $this->db = new turntable_db($db_opts['host'], $db_opts['port'],
+        $db_opts['user'], $db_opts['password'], $db_opts['database']);
+  }
+
+  public static function getInstance() {
+    if (self::$instance === NULL) {
+      self::$instance = new self();
+    }
+
+    return self::$instance;
   }
 
   /**
@@ -26,58 +53,7 @@ class turntable_client {
    * @return array
    */
   public function getDatabaseSchema() {
-    return array(
-      'tt_node_client_info' => array(
-        // Table description
-        'description' => t('Additional node information for turntable client.'),
-        'fields' => array(
-          'nid' => array(
-            'type' => 'int',
-            'unsigned' => TRUE,
-            'not null' => TRUE,
-            'default' => 0,
-            'description' => t('Local node ID.')
-          ),
-          'shard_status' => array(
-            'type' => 'int',
-            'size' => 'tiny',
-            'unsigned' => TRUE,
-            'not null' => TRUE,
-            'default' => 0,
-            'description' => t('Shard status: 0 = Not a remote content, 1 = Copy, 2 = Reference')
-          ),
-          'origin_client_id' => array(
-            'type' => 'int',
-            'unsigned' => TRUE,
-            'not null' => TRUE,
-            'default' => 0,
-            'description' => t('ID of the original client.')
-          ),
-          'origin_client_nid' => array(
-            'type' => 'int',
-            'unsigned' => TRUE,
-            'not null' => TRUE,
-            'default' => 0,
-            'description' => t('Original node ID.')
-          ),
-          'origin_client_vid' => array(
-            'type' => 'int',
-            'unsigned' => TRUE,
-            'not null' => TRUE,
-            'default' => 0,
-            'description' => t('Original node version ID.')
-          ),
-          'last_sync' => array(
-            'mysql_type' => 'DATETIME',
-            'not null' => TRUE,
-            'description' => t('Time of last sync.')
-          )
-        ),
-        'primary key' => array(
-          'nid'
-        )
-      )
-    );
+    return $this->db->getClientSchema();
   }
 
   /**
@@ -94,6 +70,12 @@ class turntable_client {
     // TODO what to do here?
   }
 
-  public function sendNode($node, $form, &$form_state) {
+  public function getMasterUrl() {
+    return $this->master_url;
+  }
+
+  public function pushNode($node) {
+    $master_url = $this->getMasterUrl();
+    http_post_fields($master_url, $node);
   }
 }
