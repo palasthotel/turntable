@@ -9,6 +9,11 @@ class turntable_db {
   // default prefix for turntable db tables
   const DEFAULT_PREFIX = 'tt_';
 
+  // table names
+  const TABLE_CLIENT_INFO = 'node_client_info';
+  const TABLE_MASTER_INFO = 'node_master_info';
+  const TABLE_MASTER_PULL = 'node_master_pull';
+
   private $connection;
 
   private $author;
@@ -55,7 +60,7 @@ class turntable_db {
 
   public function getClientSchema() {
     return array(
-      $this->prefix . 'node_client_info' => array(
+      $this->prefix . self::TABLE_CLIENT_INFO => array(
         // Table description
         'description' => t('Additional node information for turntable client.'),
         'fields' => array(
@@ -111,7 +116,7 @@ class turntable_db {
 
   public function getMasterSchema() {
     return array(
-      $this->prefix . 'node_master_info' => array(
+      $this->prefix . self::TABLE_MASTER_INFO => array(
         // Table description
         'description' => t('Additional node information for turntable master'),
         'fields' => array(
@@ -184,7 +189,7 @@ class turntable_db {
           'nid'
         )
       ),
-      $this->prefix . 'node_master_pull' => array(
+      $this->prefix . self::TABLE_MASTER_PULL => array(
         // Table description
         'description' => t('Info about turntable synchronization (node pulls)'),
         'fields' => array(
@@ -225,5 +230,13 @@ class turntable_db {
         )
       )
     );
+  }
+
+  public function setSynchronizationSettings($nid, $shared_state) {
+    $query = 'INSERT INTO `' . $this->prefix . self::TABLE_CLIENT_INFO .
+         '` (`nid`, `shared_status`) VALUES (' . $nid . ',' . $shared_state .
+         ') ON DUPLICATE KEY UPDATE `nid`=' . $nid;
+
+    $this->connection->query($query);
   }
 }
