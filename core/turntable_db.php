@@ -5,20 +5,13 @@
  *
  * @author Paul Vorbach
  */
-class turntable_db {
+abstract class turntable_db {
   // default prefix for turntable db tables
   const DEFAULT_PREFIX = 'tt_';
 
-  // table names
-  const TABLE_CLIENT_INFO = 'node_client_info';
-  const TABLE_MASTER_INFO = 'node_master_info';
-  const TABLE_MASTER_PULL = 'node_master_pull';
+  protected $connection;
 
-  private $connection;
-
-  private $author;
-
-  private $prefix;
+  protected $prefix;
 
   /**
    * Creates a new connection to the database.
@@ -36,7 +29,7 @@ class turntable_db {
    * @param string $prefix
    *          optional prefix string
    */
-  public function __construct($host, $port, $user, $password, $database,
+  protected function __construct($host, $port, $user, $password, $database,
       $prefix = '') {
     // set default port
     if ($port == '') {
@@ -57,10 +50,25 @@ class turntable_db {
   public function __destruct() {
     $this->connection->close();
   }
+}
 
-  public function getClientSchema() {
+/**
+ * Client database wrapper.
+ *
+ * @author Paul Vorbach
+ */
+class turntable_db_client extends turntable_db {
+  // table name
+  const TABLE_NODE_SHARED = 'node_client_shared';
+
+  public function __construct($host, $port, $user, $password, $database,
+      $prefix = '') {
+    parent::__construct($host, $port, $user, $password, $database, $prefix);
+  }
+
+  public function getSchema() {
     return array(
-      $this->prefix . self::TABLE_CLIENT_INFO => array(
+      $this->prefix . self::TABLE_NODE_SHARED => array(
         // Table description
         'description' => t('Additional node information for turntable client.'),
         'fields' => array(
@@ -114,9 +122,41 @@ class turntable_db {
     );
   }
 
-  public function getMasterSchema() {
+  public function setSharedState($nid, $shared_state) {
+    $query = 'INSERT INTO `' . $this->prefix . self::TABLE_CLIENT_INFO .
+         '` (`nid`, `shared_state`) VALUES (' . $nid . ',' . $shared_state .
+         ') ON DUPLICATE KEY UPDATE `shared_state`=' . $shared_state . ';';
+
+    $result = $this->connection->query($query);
+  }
+
+  public function getSharedState($nid) {
+    $query = 'SELECT `shared_state` FROM `' . $this->prefix .
+         self::TABLE_CLIENT_INFO . '` WHERE `nid`= ' . $nid . ';';
+
+    $result = $this->connection->query($query);
+
+    if (!$result) {
+      return 0; // default
+    }
+
+    $row = $result->fetch_assoc();
+
+    return $row['shared_state'];
+  }
+}
+class turntable_db_master extends turntable_db {
+  const TABLE_NODE_SHARED = 'node_master_shared';
+  const TABLE_NODE_SUBSCRIPTIONS = 'node_master_subscriptions';
+
+  public function __construct($host, $port, $user, $password, $database,
+      $prefix = '') {
+    parent::__construct($host, $port, $user, $password, $database, $prefix);
+  }
+
+  public function getSchema() {
     return array(
-      $this->prefix . self::TABLE_MASTER_INFO => array(
+      $this->prefix . self::TABLE_NODE_SHARED => array(
         // Table description
         'description' => t('Additional node information for turntable master'),
         'fields' => array(
@@ -189,9 +229,9 @@ class turntable_db {
           'nid'
         )
       ),
-      $this->prefix . self::TABLE_MASTER_PULL => array(
+      $this->prefix . self::TABLE_NODE_SUBSCRIPTIONS => array(
         // Table description
-        'description' => t('Info about turntable synchronization (node pulls)'),
+        'description' => t('Info about turntable subscriptions'),
         'fields' => array(
           'sync_id' => array(
             'type' => 'int',
@@ -214,7 +254,7 @@ class turntable_db {
             'default' => 0,
             'description' => t('ID of the client that did the pull.')
           ),
-          'first_sync' => array(
+          'first_pull' => array(
             'mysql_type' => 'DATETIME',
             'not null' => TRUE,
             'description' => t('Time of first pull.')
@@ -230,28 +270,5 @@ class turntable_db {
         )
       )
     );
-  }
-
-  public function setSharedState($nid, $shared_state) {
-    $query = 'INSERT INTO `' . $this->prefix . self::TABLE_CLIENT_INFO .
-         '` (`nid`, `shared_state`) VALUES (' . $nid . ',' . $shared_state .
-         ') ON DUPLICATE KEY UPDATE `shared_state`=' . $shared_state . ';';
-
-    $result = $this->connection->query($query);
-  }
-
-  public function getSharedState($nid) {
-    $query = 'SELECT `shared_state` FROM `' . $this->prefix .
-         self::TABLE_CLIENT_INFO . '` WHERE `nid`= ' . $nid . ';';
-
-    $result = $this->connection->query($query);
-
-    if (!$result) {
-      return 0; // default
-    }
-
-    $row = $result->fetch_assoc();
-
-    return $row['shared_state'];
   }
 }
