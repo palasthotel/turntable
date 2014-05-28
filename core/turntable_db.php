@@ -71,7 +71,7 @@ class turntable_db {
             'default' => 0,
             'description' => t('Local node ID.')
           ),
-          'shard_status' => array(
+          'shared_state' => array(
             'type' => 'int',
             'size' => 'tiny',
             'unsigned' => TRUE,
@@ -232,11 +232,20 @@ class turntable_db {
     );
   }
 
-  public function setSynchronizationSettings($nid, $shared_state) {
+  public function setSharedState($nid, $shared_state) {
     $query = 'INSERT INTO `' . $this->prefix . self::TABLE_CLIENT_INFO .
-         '` (`nid`, `shared_status`) VALUES (' . $nid . ',' . $shared_state .
-         ') ON DUPLICATE KEY UPDATE `nid`=' . $nid;
+         '` (`nid`, `shared_state`) VALUES (' . $nid . ',' . $shared_state .
+         ') ON DUPLICATE KEY UPDATE `shared_state`=' . $shared_state . ';';
 
     $this->connection->query($query);
+  }
+
+  public function getSharedState($nid) {
+    $query = 'SELECT `shared_state` FROM `' . $this->prefix .
+         self::TABLE_CLIENT_INFO . '` WHERE `nid`= ' . $nid . ';';
+
+    $result = $this->connection->query($query);
+
+    debug($result, NULL, TRUE);
   }
 }
