@@ -1,5 +1,4 @@
 <?php
-require_once './core/singleton.php';
 require_once './core/turntable_db.php';
 
 /**
