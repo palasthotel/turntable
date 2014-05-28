@@ -43,7 +43,7 @@ class turntable_db {
     $this->connection->set_charset('utf8');
 
     // remember prefix
-    $this->prefix = $prefix . DEFAULT_PREFIX;
+    $this->prefix = $prefix . self::DEFAULT_PREFIX;
   }
 
   /**
