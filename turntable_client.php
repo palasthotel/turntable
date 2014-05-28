@@ -1,5 +1,5 @@
 <?php
-require_once './core/turntable_db.php';
+require_once './sites/all/libraries/turntable/core/turntable_db.php';
 
 /**
  * Main class of the Turntable Client.
@@ -22,11 +22,11 @@ class turntable_client {
    */
   private function __construct() {
     $db_conn = Database::getConnection();
-    $db_opts = $db_conn['connectionOptions'];
+    $db_opts = $db_conn->getConnectionOptions();
 
     // use custom db connection
     $this->db = new turntable_db($db_opts['host'], $db_opts['port'],
-        $db_opts['user'], $db_opts['password'], $db_opts['database']);
+        $db_opts['username'], $db_opts['password'], $db_opts['database']);
   }
 
   public static function getInstance() {
