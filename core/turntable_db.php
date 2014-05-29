@@ -197,29 +197,26 @@ class turntable_db_master extends turntable_db {
           'client_type' => array(
             'type' => 'varchar',
             'length' => 32,
-            'unsigned' => TRUE,
             'not null' => TRUE,
-            'default' => 0,
+            'default' => '',
             'description' => t('Original node type.')
           ),
           'client_user_name' => array(
             'type' => 'varchar',
             'length' => 255,
-            'unsigned' => TRUE,
             'not null' => TRUE,
-            'default' => 0,
+            'default' => '',
             'description' => t('Origin client user name.')
           ),
           'client_author_name' => array(
             'type' => 'varchar',
             'length' => 255,
-            'unsigned' => TRUE,
             'not null' => TRUE,
-            'default' => 0,
+            'default' => '',
             'description' => t('Origin author user name.')
           ),
           'last_sync' => array(
-            'type' => 'datetime',
+            'mysql_type' => 'datetime',
             'not null' => TRUE,
             'description' => t('Time of last sync.')
           ),
@@ -259,13 +256,13 @@ class turntable_db_master extends turntable_db {
             'not null' => TRUE,
             'description' => t('ID of the client that did the pull.')
           ),
-          'first_pull' => array(
-            'type' => 'datetime',
+          'first_sync' => array(
+            'mysql_type' => 'datetime',
             'not null' => TRUE,
             'description' => t('Time of first pull.')
           ),
           'last_sync' => array(
-            'type' => 'datetime',
+            'mysql_type' => 'datetime',
             'not null' => TRUE,
             'description' => t('Time of most recent pull.')
           )
