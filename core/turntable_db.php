@@ -145,6 +145,12 @@ class turntable_db_client extends turntable_db {
     return $row['shared_state'];
   }
 }
+
+/**
+ * Master database wrapper.
+ *
+ * @author Paul Vorbach
+ */
 class turntable_db_master extends turntable_db {
   const TABLE_NODE_SHARED = 'node_master_shared';
   const TABLE_NODE_SUBSCRIPTIONS = 'node_master_subscriptions';
@@ -213,7 +219,7 @@ class turntable_db_master extends turntable_db {
             'description' => t('Origin author user name.')
           ),
           'last_sync' => array(
-            'mysql_type' => 'DATETIME', // for some reason, type=datetime won't work
+            'type' => 'datetime',
             'not null' => TRUE,
             'description' => t('Time of last sync.')
           ),
@@ -254,12 +260,12 @@ class turntable_db_master extends turntable_db {
             'description' => t('ID of the client that did the pull.')
           ),
           'first_pull' => array(
-            'mysql_type' => 'DATETIME',
+            'type' => 'datetime',
             'not null' => TRUE,
             'description' => t('Time of first pull.')
           ),
           'last_sync' => array(
-            'mysql_type' => 'DATETIME',
+            'type' => 'datetime',
             'not null' => TRUE,
             'description' => t('Time of most recent pull.')
           )
