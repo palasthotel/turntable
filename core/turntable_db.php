@@ -248,10 +248,9 @@ class turntable_db_master extends turntable_db {
             'description' => t('ID of the local node.')
           ),
           'client_id' => array(
-            'type' => 'int',
-            'unsigned' => TRUE,
+            'type' => 'varchar',
+            'length' => 255,
             'not null' => TRUE,
-            'default' => 0,
             'description' => t('ID of the client that did the pull.')
           ),
           'first_pull' => array(
