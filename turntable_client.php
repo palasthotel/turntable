@@ -23,8 +23,7 @@ class turntable_client {
    * Creates the new Turntable Client.
    */
   private function __construct() {
-    $db_conn = Database::getConnection();
-    $db_opts = $db_conn->getConnectionOptions();
+    $db_opts = Database::getConnection()->getConnectionOptions();
 
     // use custom db connection
     $this->db = new turntable_db_client($db_opts['host'], $db_opts['port'],
