@@ -27,7 +27,7 @@ class turntable_client {
     $db_opts = $db_conn->getConnectionOptions();
 
     // use custom db connection
-    $this->db = new turntable_db($db_opts['host'], $db_opts['port'],
+    $this->db = new turntable_db_client($db_opts['host'], $db_opts['port'],
         $db_opts['username'], $db_opts['password'], $db_opts['database']);
   }
 
@@ -58,7 +58,7 @@ class turntable_client {
    * @return array
    */
   public function getDatabaseSchema() {
-    return $this->db->getClientSchema();
+    return $this->db->getSchema();
   }
 
   /**
