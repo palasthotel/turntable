@@ -123,7 +123,7 @@ class turntable_db_client extends turntable_db {
   }
 
   public function setSharedState($nid, $shared_state) {
-    $query = 'INSERT INTO `' . $this->prefix . self::TABLE_CLIENT_INFO .
+    $query = 'INSERT INTO `' . $this->prefix . self::TABLE_NODE_SHARED .
          '` (`nid`, `shared_state`) VALUES (' . $nid . ',' . $shared_state .
          ') ON DUPLICATE KEY UPDATE `shared_state`=' . $shared_state . ';';
 
@@ -132,7 +132,7 @@ class turntable_db_client extends turntable_db {
 
   public function getSharedState($nid) {
     $query = 'SELECT `shared_state` FROM `' . $this->prefix .
-         self::TABLE_CLIENT_INFO . '` WHERE `nid`= ' . $nid . ';';
+         self::TABLE_NODE_SHARED . '` WHERE `nid`= ' . $nid . ';';
 
     $result = $this->connection->query($query);
 

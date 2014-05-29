@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Sends an HTTP request and returns the response as a string.
+ *
+ * @param string $method
+ * @param string $url
+ * @param array $headers
+ * @param string $data
+ * @return string
+ */
 function http_req($method, $url, $headers, $data) {
   $header = '';
   foreach ($headers as $key => $value) {
