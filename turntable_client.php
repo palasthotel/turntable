@@ -1,5 +1,6 @@
 <?php
 require_once './sites/all/libraries/turntable/core/turntable_db.php';
+require_once './sites/all/libraries/turntable/core/http.php';
 
 /**
  * Main class of the Turntable Client.
@@ -19,10 +20,14 @@ class turntable_client {
 
   private $db;
 
+  private $client_id;
+
+  private $master_url;
+
   /**
    * Creates the new Turntable Client.
    */
-  private function __construct() {
+  protected function __construct() {
     $db_opts = Database::getConnection()->getConnectionOptions();
 
     // use custom db connection
@@ -40,15 +45,6 @@ class turntable_client {
 
   public function getDB() {
     return $this->db;
-  }
-
-  /**
-   * Gets home dir path.
-   *
-   * @return string
-   */
-  private function getHome() {
-    return dirname(__FILE__) . '/';
   }
 
   /**
@@ -72,5 +68,42 @@ class turntable_client {
    */
   public function uninstall() {
     // TODO what to do here?
+  }
+
+  public function setClientID($client_id) {
+    $this->client_id = $client_id;
+  }
+
+  public function setMasterURL($master_url) {
+    $this->master_url = $master_url;
+  }
+
+  public function sendSharedNode($node, $user) {
+    $headers = array(
+      'Content-Type' => 'application/json'
+    );
+
+    $data = array();
+
+    // set data
+    $data['title'] = $node->title;
+    $data['body'] = $node->body[$node->language][0]['safe_value'];
+    $data['language'] = $node->language;
+
+    // set metadata
+    $data['client_id'] = $this->client_id;
+    $data['node_id'] = $node->nid;
+    $data['revision_uid'] = $node->revision_uid;
+    $data['content_type'] = $node->type;
+    $data['user_name'] = $user->name;
+    $data['author_name'] = $node->name;
+    $data['last_sync'] = (string) time();
+    $data['complete_content'] = json_encode($node);
+
+    // send the request with JSON encoded data
+    $response = http_req('POST', $this->master_url, $headers,
+        json_encode($data));
+
+    // TODO parse response
   }
 }
