@@ -86,7 +86,7 @@ class turntable_db_client extends turntable_db {
             'not null' => TRUE,
             'default' => 0,
             'description' => t(
-                'Shard status: 0 = Not a remote content, 1 = Copy, 2 = Reference')
+                'Shared status: 0 = None, 1 = Copy, 2 = Reference, 3 = Original')
           ),
           'origin_client_id' => array(
             'type' => 'int',
