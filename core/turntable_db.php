@@ -110,7 +110,7 @@ class turntable_db_client extends turntable_db {
             'description' => t('Original node version ID.')
           ),
           'last_sync' => array(
-            'mysql_type' => 'DATETIME',
+            'mysql_type' => 'datetime',
             'not null' => TRUE,
             'description' => t('Time of last sync.')
           )
