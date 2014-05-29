@@ -9,7 +9,7 @@
  * @param string $data
  * @return string
  */
-function http_req($method, $url, $headers, $data) {
+function http_req($method, $url, $headers = array(), $data = '') {
   $header = '';
   foreach ($headers as $key => $value) {
     $header .= $key . ': ' . $value . "\r\n";
