@@ -1,24 +1,40 @@
 <?php
-// name of the master node info table
-// (used to store information about nodes that have been pushed by a client)
-define('TT_MASTER_NODE_INFO', 'tt_master_node_info');
-
-// name of the master node info table
-// (used to store information about pull behavior)
-define('TT_MASTER_NODE_PULL', 'tt_master_node_pull');
+require_once './sites/all/libraries/turntable/core/turntable_db.php';
 
 /**
  * Main class of the Turntable Master.
+ * (Singleton)
  *
  * @author Paul Vorbach
  */
 class turntable_master {
+  // instance field
+  private static $instance = NULL;
+
+  private $db;
 
   /**
    * Creates the new Turntable Master.
    */
-  public function __construct() {
-    // TODO require_once 'classes/bootstrap.php';
+  private function __construct() {
+    $db_conn = Database::getConnection();
+    $db_opts = $db_conn->getConnectionOptions();
+
+    // use custom db connection
+    $this->db = new turntable_db_master($db_opts['host'], $db_opts['port'],
+        $db_opts['username'], $db_opts['password'], $db_opts['database']);
+  }
+
+  public static function getInstance() {
+    if (self::$instance === NULL) {
+      self::$instance = new self();
+    }
+
+    return self::$instance;
+  }
+
+  public function getDB() {
+    return $this->db;
   }
 
   /**
@@ -36,28 +52,13 @@ class turntable_master {
    * @return array
    */
   public function getDatabaseSchema() {
-    return $this->db->getMasterSchema();
+    return $this->db->getSchema();
   }
 
   /**
    * Installs the module.
    */
   public function install() {
-    $shared_type = array(
-      'type' => 'shared',
-      'name' => t('Shared'),
-      'base' => 'node_content',
-      'description' => t(
-          'Shared content between different Drupal installations. Used by Turntable.'),
-      'custom' => TRUE,
-      'modified' => TRUE,
-      'locked' => TRUE
-    );
-
-    $shared_type = node_type_set_defaults($shared_type);
-    node_type_save($shared_type);
-    node_add_body_field($shared_type);
-
     // TODO init db (probably with InnoDB foreign key settings)
   }
 
@@ -65,6 +66,6 @@ class turntable_master {
    * Uninstalls the module.
    */
   public function uninstall() {
-    // nothing to do yet
+    // TODO what to do here?
   }
 }
