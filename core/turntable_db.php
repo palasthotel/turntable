@@ -273,4 +273,8 @@ class turntable_db_master extends turntable_db {
       )
     );
   }
+
+  function saveSharedNode($node_object) {
+    print_r($node_object);
+  }
 }
