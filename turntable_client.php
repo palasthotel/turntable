@@ -81,6 +81,12 @@ class turntable_client {
     $this->master_url = $master_url;
   }
 
+  /**
+   * Sends a node as a shared node to the turntable master.
+   *
+   * @param object $node
+   * @param object $user
+   */
   public function sendSharedNode($node, $user) {
     $url = $this->master_url . self::ENDPOINT_NODE_SHARED;
 
