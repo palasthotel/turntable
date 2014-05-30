@@ -17,8 +17,8 @@ function http_req($method, $url, $headers = array(), $data = '') {
 
   $options = array(
     'http' => array(
-      'header' => $header,
       'method' => $method,
+      'header' => $header,
       'content' => $data
     )
   );
