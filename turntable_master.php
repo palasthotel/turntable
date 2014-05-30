@@ -38,24 +38,6 @@ class turntable_master {
   }
 
   /**
-   * Gets home dir path.
-   *
-   * @return string
-   */
-  private function getHome() {
-    return dirname(__FILE__) . '/';
-  }
-
-  /**
-   * Returns the db schema (in Drupals schema DSL).
-   *
-   * @return array
-   */
-  public function getDatabaseSchema() {
-    return $this->db->getSchema();
-  }
-
-  /**
    * Installs the module.
    */
   public function install() {

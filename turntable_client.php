@@ -51,15 +51,6 @@ class turntable_client {
   }
 
   /**
-   * Returns the db schema (in Drupals schema DSL).
-   *
-   * @return array
-   */
-  public function getDatabaseSchema() {
-    return $this->db->getSchema();
-  }
-
-  /**
    * Installs the module.
    */
   public function install() {
