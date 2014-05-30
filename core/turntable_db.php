@@ -301,10 +301,29 @@ class turntable_db_master extends turntable_db {
   }
 
   function saveSharedNode($shared_node) {
-    $query = 'INSERT INTO `' . $this->prefix . self::TABLE_NODE_SHARED .
-         '` (`nid`, `shared_state`) VALUES (' . $nid . ',' . $shared_state .
-         ') ON DUPLICATE KEY UPDATE `shared_state`=' . $shared_state . ';';
+    $nid = $shared_node['nid'];
+    $client_id = $shared_node['client_id'];
+    $client_nid = $shared_node['node_id'];
+    $client_vid = $shared_node['revision_uid'];
+    $client_type = $shared_node['content_type'];
+    $client_user_name = $shared_node['user_name'];
+    $client_author_name = $shared_node['author_name'];
+    $last_sync = time();
+    $complete_content = str_replace('\'', '\\\'',
+        $shared_node['complete_content']);
 
-    print_r($node_object);
+    // insert shared node
+    $query = 'INSERT INTO `' . $this->prefix . self::TABLE_NODE_SHARED .
+         '` (`nid`, `client_id`, `client_nid`, `client_vid`, `client_type`, `client_user_name`, `client_author_name`, `last_sync`, `complete_content`) VALUES (' .
+         $nid . ',\'' . $client_id . '\',' . $client_nid . ',' . $client_vid .
+         ',\'' . $client_type . '\',\'' . $client_user_name . '\',\'' .
+         $client_author_name . '\',' . $last_sync . ',\'' . $complete_content .
+         '\') ON DUPLICATE KEY UPDATE `nid`=`nid`;';
+
+    $result = $this->connection->query($query);
+
+    if (!result) {
+      echo 'mayday';
+    }
   }
 }
