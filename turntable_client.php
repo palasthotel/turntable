@@ -15,6 +15,9 @@ class turntable_client {
   const SHARED_REF = 2; // reference to a node on the master
   const SHARED_ORIG = 3; // original node (changes will be sent to master)
 
+  // master endpoint resource
+  const ENDPOINT_NODE_SHARED = '/api/turntable/v1/node-shared';
+
   // instance field
   private static $instance = NULL;
 
@@ -79,10 +82,10 @@ class turntable_client {
   }
 
   public function sendSharedNode($node, $user) {
-    $url = $this->master_url;
+    $url = $this->master_url . self::ENDPOINT_NODE_SHARED;
 
     $headers = array(
-      'Content-Type' => 'application/json',
+      'Content-Type' => 'application/json'
     );
 
     $data = array();
