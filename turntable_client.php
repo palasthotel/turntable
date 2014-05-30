@@ -79,8 +79,10 @@ class turntable_client {
   }
 
   public function sendSharedNode($node, $user) {
+    $url = $this->master_url;
+
     $headers = array(
-      'Content-Type' => 'application/json'
+      'Content-Type' => 'application/json',
     );
 
     $data = array();
@@ -101,9 +103,9 @@ class turntable_client {
     $data['complete_content'] = json_encode($node);
 
     // send the request with JSON encoded data
-    $response = http_req('POST', $this->master_url, $headers,
-        json_encode($data));
+    $response = http_req('POST', $url, $headers, json_encode($data));
 
     // TODO parse response
+    debug($response);
   }
 }
