@@ -16,7 +16,7 @@ class turntable_client {
   const SHARED_ORIG = 3; // original node (changes will be sent to master)
 
   // master endpoint resource
-  const ENDPOINT_NODE_SHARED = '/api/turntable/v1/node-shared';
+  const ENDPOINT_NODE_SHARED = 'api/turntable-master/v1/node-shared';
 
   // instance field
   private static $instance = NULL;
