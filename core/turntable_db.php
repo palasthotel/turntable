@@ -275,28 +275,29 @@ class turntable_db_master extends turntable_db {
   }
 
   /**
-   * Checks, whether the given shared node already exists on the master.
+   * Checks, whether the given shared node already exists on the master and
+   * returns the corresponding node id.
    *
    * @param object $shared_node
-   * @return boolean
+   * @return int
    */
-  function existsSharedNode($shared_node) {
+  function getSharedNodeID($shared_node) {
     $client_id = $shared_node['client_id'];
     $client_nid = $shared_node['nid'];
 
-    $query = 'SELECT COUNT(`client_nid`) AS `same_node` FROM `' . $this->prefix .
+    $query = 'SELECT `nid` AS `same_node` FROM `' . $this->prefix .
          self::TABLE_NODE_SHARED . '` WHERE `client_id`=\'' . $client_id .
          '\' AND `client_nid`=' . $client_nid . ';';
 
     $result = $this->connection->query($query);
 
-    if (!$result) {
+    if (!$result || $result->num_rows == 0) {
       return FALSE; // default
     }
 
     $row = $result->fetch_assoc();
 
-    return $row['same_node'] == 1;
+    return (int) $row['nid'];
   }
 
   function saveSharedNode($shared_node) {
