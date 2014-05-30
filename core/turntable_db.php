@@ -59,7 +59,7 @@ abstract class turntable_db {
  */
 class turntable_db_client extends turntable_db {
   // table name
-  const TABLE_NODE_SHARED = 'node_client_shared';
+  const TABLE_NODE_SHARED = 'client_node_shared';
 
   public function __construct($host, $port, $user, $password, $database,
       $prefix = '') {
@@ -152,8 +152,8 @@ class turntable_db_client extends turntable_db {
  * @author Paul Vorbach
  */
 class turntable_db_master extends turntable_db {
-  const TABLE_NODE_SHARED = 'node_master_shared';
-  const TABLE_NODE_SUBSCRIPTIONS = 'node_master_subscriptions';
+  const TABLE_NODE_SHARED = 'master_node_shared';
+  const TABLE_NODE_SUBSCRIPTIONS = 'master_node_subscriptions';
 
   public function __construct($host, $port, $user, $password, $database,
       $prefix = '') {
@@ -275,6 +275,10 @@ class turntable_db_master extends turntable_db {
   }
 
   function saveSharedNode($node_object) {
+    $query = 'INSERT INTO `' . $this->prefix . self::TABLE_NODE_SHARED .
+         '` (`nid`, `shared_state`) VALUES (' . $nid . ',' . $shared_state .
+         ') ON DUPLICATE KEY UPDATE `shared_state`=' . $shared_state . ';';
+
     print_r($node_object);
   }
 }
