@@ -75,35 +75,20 @@ class turntable_client {
   /**
    * Sends a node as a shared node to the turntable master.
    *
-   * @param object $node
-   * @param object $user
+   * @param object $shared_node
    */
-  public function sendSharedNode($node, $user) {
+  public function sendSharedNode($shared_node) {
     $url = $this->master_url . self::ENDPOINT_NODE_SHARED;
 
     $headers = array(
       'Content-Type' => 'application/json'
     );
 
-    $data = array();
-
-    // set data
-    $data['title'] = $node->title;
-    $data['body'] = $node->body[$node->language][0]['safe_value'];
-    $data['language'] = $node->language;
-
-    // set metadata
-    $data['client_id'] = $this->client_id;
-    $data['node_id'] = $node->nid;
-    $data['revision_uid'] = $node->revision_uid;
-    $data['content_type'] = $node->type;
-    $data['user_name'] = $user->name;
-    $data['author_name'] = $node->name;
-    $data['last_sync'] = (string) time();
-    $data['complete_content'] = json_encode($node);
+    // add client id
+    $shared_node['client_id'] = $this->client_id;
 
     // send the request with JSON encoded data
-    $response = http_req('POST', $url, $headers, json_encode($data));
+    $response = http_req('POST', $url, $headers, json_encode($shared_node));
 
     // TODO parse response
     debug($response);
