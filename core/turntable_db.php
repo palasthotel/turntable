@@ -123,16 +123,16 @@ class turntable_db_client extends turntable_db {
   }
 
   public function setSharedState($nid, $shared_state) {
-    $query = 'INSERT INTO `' . $this->prefix . self::TABLE_NODE_SHARED .
-         '` (`nid`, `shared_state`) VALUES (' . $nid . ',' . $shared_state .
-         ') ON DUPLICATE KEY UPDATE `shared_state`=' . $shared_state . ';';
+    $query = 'INSERT INTO ' . $this->prefix . self::TABLE_NODE_SHARED .
+         ' (nid, shared_state) VALUES (' . $nid . ',' . $shared_state .
+         ') ON DUPLICATE KEY UPDATE shared_state=' . $shared_state . ';';
 
     $result = $this->connection->query($query);
   }
 
   public function getSharedState($nid) {
-    $query = 'SELECT `shared_state` FROM `' . $this->prefix .
-         self::TABLE_NODE_SHARED . '` WHERE `nid`= ' . $nid . ';';
+    $query = 'SELECT shared_state FROM ' . $this->prefix .
+         self::TABLE_NODE_SHARED . ' WHERE nid= ' . $nid . ';';
 
     $result = $this->connection->query($query);
 
@@ -285,9 +285,9 @@ class turntable_db_master extends turntable_db {
     $client_id = $shared_node['client_id'];
     $client_nid = $shared_node['nid'];
 
-    $query = 'SELECT `nid` AS `same_node` FROM `' . $this->prefix .
-         self::TABLE_NODE_SHARED . '` WHERE `client_id`=\'' . $client_id .
-         '\' AND `client_nid`=' . $client_nid . ';';
+    $query = 'SELECT nid AS same_node FROM ' . $this->prefix .
+         self::TABLE_NODE_SHARED . ' WHERE client_id=\'' . $client_id .
+         '\' AND client_nid=' . $client_nid . ';';
 
     $result = $this->connection->query($query);
 
@@ -313,17 +313,17 @@ class turntable_db_master extends turntable_db {
         $shared_node['complete_content']);
 
     // insert shared node
-    $query = 'INSERT INTO `' . $this->prefix . self::TABLE_NODE_SHARED .
-         '` (`nid`, `client_id`, `client_nid`, `client_vid`, `client_type`, `client_user_name`, `client_author_name`, `last_sync`, `complete_content`) VALUES (' .
+    $query = 'INSERT INTO ' . $this->prefix . self::TABLE_NODE_SHARED .
+         ' (nid, client_id, client_nid, client_vid, client_type, client_user_name, client_author_name, last_sync, complete_content) VALUES (' .
          $nid . ',\'' . $client_id . '\',' . $client_nid . ',' . $client_vid .
          ',\'' . $client_type . '\',\'' . $client_user_name . '\',\'' .
          $client_author_name . '\',' . $last_sync . ',\'' . $complete_content .
-         '\') ON DUPLICATE KEY UPDATE `nid`=`nid`;';
+         '\');';
+
+    return $query;
 
     $result = $this->connection->query($query);
 
-    if (!result) {
-      echo 'mayday';
-    }
+    return $result;
   }
 }
