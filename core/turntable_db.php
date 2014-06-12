@@ -275,7 +275,7 @@ class turntable_db_master extends turntable_db {
   }
 
   /**
-   * Checks, whether the given shared node already exists on the master and
+   * Checks whether the given shared node already exists on the master and
    * returns the corresponding node id.
    *
    * @param object $shared_node
@@ -283,7 +283,7 @@ class turntable_db_master extends turntable_db {
    */
   function getSharedNodeID($shared_node) {
     $client_id = $shared_node['client_id'];
-    $client_nid = $shared_node['nid'];
+    $client_nid = $shared_node['node_id'];
 
     $query = 'SELECT nid AS same_node FROM ' . $this->prefix .
          self::TABLE_NODE_SHARED . ' WHERE client_id=\'' . $client_id .
