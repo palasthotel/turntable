@@ -90,7 +90,6 @@ class turntable_client {
     // send the request with JSON encoded data
     $response = http_req('POST', $url, $headers, json_encode($shared_node));
 
-    // TODO parse response
-    debug($response);
+    return $response;
   }
 }

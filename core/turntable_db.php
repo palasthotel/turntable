@@ -285,9 +285,9 @@ class turntable_db_master extends turntable_db {
     $client_id = $shared_node['client_id'];
     $client_nid = $shared_node['node_id'];
 
-    $query = 'SELECT nid AS same_node FROM ' . $this->prefix .
-         self::TABLE_NODE_SHARED . ' WHERE client_id=\'' . $client_id .
-         '\' AND client_nid=' . $client_nid . ';';
+    $query = 'SELECT nid FROM ' . $this->prefix . self::TABLE_NODE_SHARED .
+         ' WHERE client_id=\'' . $client_id . '\' AND client_nid=' . $client_nid .
+         ';';
 
     $result = $this->connection->query($query);
 
@@ -300,7 +300,7 @@ class turntable_db_master extends turntable_db {
     return (int) $row['nid'];
   }
 
-  function saveSharedNode($shared_node) {
+  public function addSharedNode($shared_node) {
     $nid = $shared_node['nid'];
     $client_id = $shared_node['client_id'];
     $client_nid = $shared_node['node_id'];
@@ -312,18 +312,49 @@ class turntable_db_master extends turntable_db {
     $complete_content = str_replace('\'', '\\\'',
         $shared_node['complete_content']);
 
+    $table = $this->prefix . self::TABLE_NODE_SHARED;
+
     // insert shared node
-    $query = 'INSERT INTO ' . $this->prefix . self::TABLE_NODE_SHARED .
-         ' (nid, client_id, client_nid, client_vid, client_type, client_user_name, client_author_name, last_sync, complete_content) VALUES (' .
-         $nid . ',\'' . $client_id . '\',' . $client_nid . ',' . $client_vid .
-         ',\'' . $client_type . '\',\'' . $client_user_name . '\',\'' .
-         $client_author_name . '\',' . $last_sync . ',\'' . $complete_content .
-         '\');';
+    $query = <<<EOT
+INSERT INTO $table
+  (nid, client_id, client_nid, client_vid, client_type, client_user_name,
+  client_author_name, last_sync, complete_content)
+VALUES ($nid, '$client_id', $client_nid, $client_vid, '$client_type',
+  '$client_user_name', '$client_author_name', $last_sync, '$complete_content');
+EOT;
 
     return $query;
 
     $result = $this->connection->query($query);
 
     return $result;
+  }
+
+  public function updateSharedNode($shared_node) {
+    $nid = $shared_node['nid'];
+    $client_id = $shared_node['client_id'];
+    $client_nid = $shared_node['node_id'];
+    $client_vid = $shared_node['revision_uid'];
+    $client_type = $shared_node['content_type'];
+    $client_user_name = $shared_node['user_name'];
+    $client_author_name = $shared_node['author_name'];
+    $last_sync = time();
+    $complete_content = str_replace('\'', '\\\'',
+      $shared_node['complete_content']);
+
+    $table = $this->prefix . self::TABLE_NODE_SHARED;
+
+    $query = <<<EOT
+UPDATE $table
+SET client_vid=$client_vid,
+  client_type='$client_type',
+  client_user_name='$client_user_name',
+  client_author_name='$client_author_name',
+  last_sync=$last_sync,
+  complete_content='$complete_content'
+WHERE nid=$nid;
+EOT;
+
+    return $this->connection->query($query);
   }
 }
