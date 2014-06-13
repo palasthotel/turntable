@@ -357,4 +357,13 @@ EOT;
 
     return $this->connection->query($query);
   }
+
+  public function findSharedNode($search_term) {
+    $query = <<<EOT
+SELECT * FROM $table
+WHERE complete_content LIKE '$search_term';
+EOT;
+
+    return $this->connection->query($query);
+  }
 }
