@@ -308,7 +308,7 @@ class turntable_db_master extends turntable_db {
     $client_type = $shared_node['content_type'];
     $client_user_name = $shared_node['user_name'];
     $client_author_name = $shared_node['author_name'];
-    $last_sync = time();
+    $last_sync = date('Y-m-d H:i:s');
     $complete_content = str_replace('\'', '\\\'',
         $shared_node['complete_content']);
 
@@ -320,7 +320,8 @@ INSERT INTO $table
   (nid, client_id, client_nid, client_vid, client_type, client_user_name,
   client_author_name, last_sync, complete_content)
 VALUES ($nid, '$client_id', $client_nid, $client_vid, '$client_type',
-  '$client_user_name', '$client_author_name', $last_sync, '$complete_content');
+  '$client_user_name', '$client_author_name', '$last_sync',
+  '$complete_content');
 EOT;
 
     return $query;
@@ -338,7 +339,7 @@ EOT;
     $client_type = $shared_node['content_type'];
     $client_user_name = $shared_node['user_name'];
     $client_author_name = $shared_node['author_name'];
-    $last_sync = time();
+    $last_sync = date('Y-m-d H:i:s');
     $complete_content = str_replace('\'', '\\\'',
       $shared_node['complete_content']);
 
@@ -350,7 +351,7 @@ SET client_vid=$client_vid,
   client_type='$client_type',
   client_user_name='$client_user_name',
   client_author_name='$client_author_name',
-  last_sync=$last_sync,
+  last_sync='$last_sync',
   complete_content='$complete_content'
 WHERE nid=$nid;
 EOT;
