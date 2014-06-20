@@ -94,7 +94,7 @@ class turntable_client {
   }
 
   public function findSharedNode($query) {
-    $url = $this->master_url . self::ENDPOINT_NODE_SHARED . '?q=' .
+    $url = $this->master_url . self::ENDPOINT_NODE_SHARED . '?query=' .
          urlencode($query);
 
     $headers = array(
