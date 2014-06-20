@@ -315,14 +315,14 @@ class turntable_db_master extends turntable_db {
     $table = $this->prefix . self::TABLE_NODE_SHARED;
 
     // insert shared node
-    $query = <<<EOT
+    $query = <<<QUERY
 INSERT INTO $table
   (nid, client_id, client_nid, client_vid, client_type, client_user_name,
   client_author_name, last_sync, complete_content)
 VALUES ($nid, '$client_id', $client_nid, $client_vid, '$client_type',
   '$client_user_name', '$client_author_name', '$last_sync',
   '$complete_content');
-EOT;
+QUERY;
 
     return $query;
 
@@ -345,7 +345,7 @@ EOT;
 
     $table = $this->prefix . self::TABLE_NODE_SHARED;
 
-    $query = <<<EOT
+    $query = <<<QUERY
 UPDATE $table
 SET client_vid=$client_vid,
   client_type='$client_type',
@@ -354,17 +354,23 @@ SET client_vid=$client_vid,
   last_sync='$last_sync',
   complete_content='$complete_content'
 WHERE nid=$nid;
-EOT;
+QUERY;
 
     return $this->connection->query($query);
   }
 
   public function findSharedNode($query) {
-    $search_terms = preg_split($query('\s+', $query));
+    $table = $this->prefix . self::TABLE_NODE_SHARED;
+
+    $search_terms = preg_split('/\s+/', $query);
 
     $num_of_terms = count($search_terms);
 
-    $sql_cond = 'WHERE ';
+    if ($num_of_terms == 1 && $search_terms[0] == '') {
+      return array();
+    }
+
+    $sql_cond = '';
     for($i = 0; $i < $num_of_terms; ++ $i) {
       $term = $search_terms[$i];
       $esc_term = $this->connection->real_escape_string($term);
@@ -375,13 +381,20 @@ EOT;
       }
     }
 
-    $sql = <<<EOT
-SELECT * FROM $table
-$sql_cond;
-EOT;
+    $sql = <<<QUERY
+SELECT node.nid, node.title, ns.client_author_name as author, ns.last_sync FROM $table as ns, node
+WHERE node.nid=ns.nid AND
+$sql_cond
+ORDER BY ns.last_sync DESC;
+QUERY;
 
-    return $sql;
+    $res = $this->connection->query($sql);
 
-    return $this->connection->query($sql);
+    $results = array();
+    while ($row = $res->fetch_assoc()) {
+      $results[] = $row;
+    }
+
+    return $results;
   }
 }
