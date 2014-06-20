@@ -93,15 +93,14 @@ class turntable_client {
     return $response;
   }
 
-  public function findRemoteContent($query) {
-    $url = $this->master_url . self::ENDPOINT_NODE_SHARED;
+  public function findSharedNode($query) {
+    $url = $this->master_url . self::ENDPOINT_NODE_SHARED . '?q=' .
+         urlencode($query);
+
     $headers = array(
       'Content-Type' => 'application/json'
     );
-    $content = json_encode(array(
-      'query' => $query
-    ));
 
-    return http_req('GET', $url, $headers, $content);
+    return http_req('GET', $url, $headers);
   }
 }
