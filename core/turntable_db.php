@@ -341,7 +341,7 @@ EOT;
     $client_author_name = $shared_node['author_name'];
     $last_sync = date('Y-m-d H:i:s');
     $complete_content = str_replace('\'', '\\\'',
-      $shared_node['complete_content']);
+        $shared_node['complete_content']);
 
     $table = $this->prefix . self::TABLE_NODE_SHARED;
 
@@ -359,12 +359,29 @@ EOT;
     return $this->connection->query($query);
   }
 
-  public function findSharedNode($search_term) {
-    $query = <<<EOT
+  public function findSharedNode($query) {
+    $search_terms = preg_split($query('\s+', $query));
+
+    $num_of_terms = count($search_terms);
+
+    $sql_cond = 'WHERE ';
+    for($i = 0; $i < $num_of_terms; ++ $i) {
+      $term = $search_terms[$i];
+      $esc_term = $this->connection->real_escape_string($term);
+      $sql_cond .= ' complete_content LIKE \'%' . $esc_term . '%\'';
+
+      if ($i + 1 < $num_of_terms) {
+        $sql_cond .= ' AND';
+      }
+    }
+
+    $sql = <<<EOT
 SELECT * FROM $table
-WHERE complete_content LIKE '$search_term';
+$sql_cond;
 EOT;
 
-    return $this->connection->query($query);
+    return $sql;
+
+    return $this->connection->query($sql);
   }
 }
