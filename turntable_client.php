@@ -95,8 +95,13 @@ class turntable_client {
 
   public function findRemoteContent($query) {
     $url = $this->master_url . self::ENDPOINT_NODE_SHARED;
-    $url .= '?q=' . urlencode($query);
+    $headers = array(
+      'Content-Type' => 'application/json'
+    );
+    $content = json_encode(array(
+      'query' => $query
+    ));
 
-    return http_req('GET', $url);
+    return http_req('GET', $url, $headers, $content);
   }
 }
