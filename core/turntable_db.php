@@ -285,9 +285,14 @@ class turntable_db_master extends turntable_db {
     $client_id = $shared_node['client_id'];
     $client_nid = $shared_node['node_id'];
 
-    $query = 'SELECT nid FROM ' . $this->prefix . self::TABLE_NODE_SHARED .
-         ' WHERE client_id=\'' . $client_id . '\' AND client_nid=' . $client_nid .
-         ';';
+    $table = $this->prefix . self::TABLE_NODE_SHARED;
+
+    $sql = <<<QUERY
+SELECT nid
+FROM $table
+WHERE client_id='$client_id'
+  AND client_nid=$client_nid;
+QUERY;
 
     $result = $this->connection->query($query);
 
