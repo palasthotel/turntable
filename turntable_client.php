@@ -90,7 +90,7 @@ class turntable_client {
     // send the request with JSON encoded data
     $response = http_req('POST', $url, $headers, json_encode($shared_node));
 
-    return json_decode($response);
+    return $response;
   }
 
   public function findSharedNode($query) {
@@ -101,10 +101,11 @@ class turntable_client {
       'Content-Type' => 'application/json'
     );
 
-    return http_req('GET', $url, $headers);
+    return json_decode(http_req('GET', $url, $headers));
   }
 
   public function getSharedNode($nid) {
+    $url = $this->master_url . self::ENDPOINT_NODE_SHARED . '/' . $nid;
     return http_req('GET', $url);
   }
 }
