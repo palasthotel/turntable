@@ -382,7 +382,8 @@ QUERY;
     }
 
     $sql = <<<QUERY
-SELECT node.nid, node.title, ns.client_author_name as author, ns.last_sync FROM $table as ns, node
+SELECT node.nid, node.title, ns.client_author_name as author, ns.last_sync
+FROM $table as ns, node
 WHERE node.nid=ns.nid AND
 $sql_cond
 ORDER BY ns.last_sync DESC;
@@ -396,5 +397,30 @@ QUERY;
     }
 
     return $results;
+  }
+
+  public function getSharedNode($nid) {
+    $table = $this->prefix . self::TABLE_NODE_SHARED;
+
+    $sql = <<<QUERY
+SELECT node.nid, node.title, ns.client_author_name as author, ns.last_sync
+FROM $table as ns, node
+WHERE node.nid=$nid AND node.nid=ns.nid;
+QUERY;
+
+    $res = $this->connection->query($sql);
+
+    return $res->fetch_assoc();
+  }
+
+  public function deleteSharedNode($nid) {
+    $table = $this->prefix . self::TABLE_NODE_SHARED;
+
+    $sql = <<<QUERY
+DELETE FROM $table
+WHERE nid=$nid;
+QUERY;
+
+    return $this->connection->query($sql);
   }
 }
