@@ -389,8 +389,8 @@ QUERY;
     $sql = <<<QUERY
 SELECT node.nid, node.title, ns.client_author_name as author, ns.last_sync
 FROM $table as ns, node
-WHERE node.nid=ns.nid AND
-$sql_cond
+WHERE node.nid=ns.nid
+  AND $sql_cond
 ORDER BY ns.last_sync DESC;
 QUERY;
 
@@ -410,7 +410,8 @@ QUERY;
     $sql = <<<QUERY
 SELECT node.nid, node.title, ns.client_author_name as author, ns.last_sync
 FROM $table as ns, node
-WHERE node.nid=$nid AND node.nid=ns.nid;
+WHERE node.nid=$nid
+  AND node.nid=ns.nid;
 QUERY;
 
     $res = $this->connection->query($sql);
