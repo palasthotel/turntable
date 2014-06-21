@@ -329,11 +329,7 @@ VALUES ($nid, '$client_id', $client_nid, $client_vid, '$client_type',
   '$complete_content');
 QUERY;
 
-    return $query;
-
-    $result = $this->connection->query($query);
-
-    return $result;
+    return $this->connection->query($query);
   }
 
   public function updateSharedNode($shared_node) {
