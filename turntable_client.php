@@ -88,9 +88,9 @@ class turntable_client {
     $shared_node['client_id'] = $this->client_id;
 
     // send the request with JSON encoded data
-    $response = http_req('POST', $url, $headers, json_encode($shared_node));
+    $res = http_req('POST', $url, $headers, json_encode($shared_node));
 
-    return $response;
+    return $res;
   }
 
   public function findSharedNode($query) {
