@@ -404,10 +404,9 @@ QUERY;
     $table = $this->prefix . self::TABLE_NODE_SHARED;
 
     $sql = <<<QUERY
-SELECT node.nid, node.title, ns.client_author_name as author, ns.last_sync
-FROM $table as ns, node
-WHERE node.nid=$nid
-  AND node.nid=ns.nid;
+SELECT nid, client_id, client_nid, client_vid, client_user_name, client_author_name as author, last_sync
+FROM $table
+WHERE nid=$nid
 QUERY;
 
     $res = $this->connection->query($sql);
