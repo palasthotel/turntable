@@ -125,12 +125,12 @@ class turntable_db_client extends turntable_db {
   public function addSharedNode($shared_node) {
     $table = $this->prefix . self::TABLE_NODE_SHARED;
 
-    $nid = $shared_node['nid'];
-    $shared_state = $shared_node['shared_state'];
-    $original_client_id = $shared_node['client_id'];
-    $original_client_nid = $shared_node['client_nid'];
-    $original_client_vid = $shared_node['client_vid'];
-    $last_sync = $shared_node['last_sync'];
+    $nid = $shared_node->nid;
+    $shared_state = $shared_node->shared_state;
+    $original_client_id = $shared_node->client_id;
+    $original_client_nid = $shared_node->client_nid;
+    $original_client_vid = $shared_node->revision_uid;
+    $last_sync = date('Y-m-d H:i:s', $shared_node->last_sync->getTimestamp());
 
     $sql = <<<SQL
 INSERT INTO $table
