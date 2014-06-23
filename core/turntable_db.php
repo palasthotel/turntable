@@ -294,7 +294,7 @@ WHERE client_id='$client_id'
   AND client_nid=$client_nid;
 QUERY;
 
-    $result = $this->connection->query($query);
+    $result = $this->connection->query($sql);
 
     if (!$result || $result->num_rows == 0) {
       return FALSE; // default
