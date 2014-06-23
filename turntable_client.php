@@ -101,11 +101,16 @@ class turntable_client {
       'Content-Type' => 'application/json'
     );
 
-    return json_decode(http_req('GET', $url, $headers));
+    $res = http_req('GET', $url, $headers);
+
+    return json_decode($res);
   }
 
   public function getSharedNode($nid) {
     $url = $this->master_url . self::ENDPOINT_NODE_SHARED . '/' . $nid;
-    return http_req('GET', $url);
+
+    $res = http_req('GET', $url);
+
+    return json_decode($res);
   }
 }

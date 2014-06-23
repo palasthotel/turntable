@@ -404,14 +404,20 @@ QUERY;
     $table = $this->prefix . self::TABLE_NODE_SHARED;
 
     $sql = <<<QUERY
-SELECT nid, client_id, client_nid, client_vid, client_user_name, client_author_name as author, last_sync
+SELECT client_id, client_nid, client_vid, client_type, client_user_name, client_author_name, last_sync
 FROM $table
 WHERE nid=$nid
 QUERY;
 
     $res = $this->connection->query($sql);
 
-    return $res->fetch_assoc();
+    $shared = $res->fetch_assoc();
+
+    // fix types
+    $shared['client_nid'] = (int) $shared['client_nid'];
+    $shared['client_vid'] = (int) $shared['client_vid'];
+
+    return $shared;
   }
 
   public function deleteSharedNode($nid) {
