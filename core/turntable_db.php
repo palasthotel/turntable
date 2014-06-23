@@ -88,21 +88,21 @@ class turntable_db_client extends turntable_db {
             'description' => t(
                 'Shared status: 0 = None, 1 = Copy, 2 = Reference, 3 = Original')
           ),
-          'origin_client_id' => array(
-            'type' => 'int',
+          'original_client_id' => array(
+            'type' => 'string',
             'unsigned' => TRUE,
             'not null' => TRUE,
             'default' => 0,
             'description' => t('ID of the original client.')
           ),
-          'origin_client_nid' => array(
+          'original_client_nid' => array(
             'type' => 'int',
             'unsigned' => TRUE,
             'not null' => TRUE,
             'default' => 0,
             'description' => t('Original node ID.')
           ),
-          'origin_client_vid' => array(
+          'original_client_vid' => array(
             'type' => 'int',
             'unsigned' => TRUE,
             'not null' => TRUE,
@@ -122,25 +122,63 @@ class turntable_db_client extends turntable_db {
     );
   }
 
-  public function setSharedState($nid, $shared_state) {
-    $query = 'INSERT INTO ' . $this->prefix . self::TABLE_NODE_SHARED .
-         ' (nid, shared_state) VALUES (' . $nid . ',' . $shared_state .
-         ') ON DUPLICATE KEY UPDATE shared_state=' . $shared_state . ';';
+  public function addSharedNode($shared_node) {
+    $table = $this->prefix . self::TABLE_NODE_SHARED;
 
-    $result = $this->connection->query($query);
+    $nid = $shared_node['nid'];
+    $shared_state = $shared_node['shared_state'];
+    $original_client_id = $shared_node['client_id'];
+    $original_client_nid = $shared_node['client_nid'];
+    $original_client_vid = $shared_node['client_vid'];
+    $last_sync = $shared_node['last_sync'];
+
+    $sql = <<<SQL
+INSERT INTO $table
+  (nid, shared_state, original_client_id, original_client_nid, original_client_vid,
+    last_sync)
+VALUES
+  ($nid, $shared_state, '$original_client_id', '$original_client_nid',
+     '$original_client_vid', '$last_sync');
+SQL;
+
+    $res = $this->connection->query($sql);
+
+    return $res;
+  }
+
+  public function setSharedState($nid, $shared_node) {
+    $table = $this->prefix . self::TABLE_NODE_SHARED;
+
+    $sql = <<<SQL
+INSERT INTO $table
+  (nid, shared_state)
+VALUES
+  ($nid, $shared_state)
+ON DUPLICATE KEY UPDATE
+  shared_state=$shared_state;
+SQL;
+
+    $res = $this->connection->query($sql);
+
+    return $res;
   }
 
   public function getSharedState($nid) {
-    $query = 'SELECT shared_state FROM ' . $this->prefix .
-         self::TABLE_NODE_SHARED . ' WHERE nid= ' . $nid . ';';
+    $table = $this->prefix . self::TABLE_NODE_SHARED;
 
-    $result = $this->connection->query($query);
+    $sql = <<<SQL
+SELECT shared_state
+FROM $table
+WHERE nid=$nid;
+SQL;
 
-    if (!$result) {
+    $res = $this->connection->query($sql);
+
+    if (!$res) {
       return 0; // default
     }
 
-    $row = $result->fetch_assoc();
+    $row = $res->fetch_assoc();
 
     return $row['shared_state'];
   }
@@ -173,11 +211,11 @@ class turntable_db_master extends turntable_db {
             'default' => 0,
             'description' => t('Local node ID.')
           ),
-          'client_id' => array(
-            'type' => 'int',
-            'unsigned' => TRUE,
+          'client_url' => array(
+            'type' => 'varchar',
+            'length' => 32,
             'not null' => TRUE,
-            'default' => 0,
+            'default' => '',
             'description' => t('ID of the original client.')
           ),
           'client_nid' => array(
@@ -287,20 +325,20 @@ class turntable_db_master extends turntable_db {
 
     $table = $this->prefix . self::TABLE_NODE_SHARED;
 
-    $sql = <<<QUERY
+    $sql = <<<SQL
 SELECT nid
 FROM $table
 WHERE client_id='$client_id'
   AND client_nid=$client_nid;
-QUERY;
+SQL;
 
-    $result = $this->connection->query($sql);
+    $res = $this->connection->query($sql);
 
-    if (!$result || $result->num_rows == 0) {
+    if (!$res || $res->num_rows == 0) {
       return FALSE; // default
     }
 
-    $row = $result->fetch_assoc();
+    $row = $res->fetch_assoc();
 
     return (int) $row['nid'];
   }
@@ -320,14 +358,14 @@ QUERY;
     $table = $this->prefix . self::TABLE_NODE_SHARED;
 
     // insert shared node
-    $query = <<<QUERY
+    $query = <<<SQL
 INSERT INTO $table
   (nid, client_id, client_nid, client_vid, client_type, client_user_name,
   client_author_name, last_sync, complete_content)
 VALUES ($nid, '$client_id', $client_nid, $client_vid, '$client_type',
   '$client_user_name', '$client_author_name', '$last_sync',
   '$complete_content');
-QUERY;
+SQL;
 
     return $this->connection->query($query);
   }
@@ -346,7 +384,7 @@ QUERY;
 
     $table = $this->prefix . self::TABLE_NODE_SHARED;
 
-    $query = <<<QUERY
+    $query = <<<SQL
 UPDATE $table
 SET client_vid=$client_vid,
   client_type='$client_type',
@@ -355,7 +393,7 @@ SET client_vid=$client_vid,
   last_sync='$last_sync',
   complete_content='$complete_content'
 WHERE nid=$nid;
-QUERY;
+SQL;
 
     return $this->connection->query($query);
   }
@@ -382,13 +420,13 @@ QUERY;
       }
     }
 
-    $sql = <<<QUERY
+    $sql = <<<SQL
 SELECT node.nid, node.title, ns.client_author_name as author, ns.last_sync
 FROM $table as ns, node
 WHERE node.nid=ns.nid
   AND $sql_cond
 ORDER BY ns.last_sync DESC;
-QUERY;
+SQL;
 
     $res = $this->connection->query($sql);
 
@@ -403,11 +441,11 @@ QUERY;
   public function getSharedNode($nid) {
     $table = $this->prefix . self::TABLE_NODE_SHARED;
 
-    $sql = <<<QUERY
+    $sql = <<<SQL
 SELECT client_id, client_nid, client_vid, client_type, client_user_name, client_author_name, last_sync
 FROM $table
 WHERE nid=$nid
-QUERY;
+SQL;
 
     $res = $this->connection->query($sql);
 
@@ -423,10 +461,10 @@ QUERY;
   public function deleteSharedNode($nid) {
     $table = $this->prefix . self::TABLE_NODE_SHARED;
 
-    $sql = <<<QUERY
+    $sql = <<<SQL
 DELETE FROM $table
 WHERE nid=$nid;
-QUERY;
+SQL;
 
     return $this->connection->query($sql);
   }
