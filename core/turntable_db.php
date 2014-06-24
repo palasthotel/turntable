@@ -153,6 +153,37 @@ SQL;
     return $res;
   }
 
+  public function getSharedNodeID($master_node_id) {
+    $table = $this->prefix . self::TABLE_NODE_SHARED;
+
+    $sql = <<<SQL
+SELECT nid
+FROM $table
+WHERE master_node_id=$master_node_id;
+SQL;
+
+    $res = $this->connection->query($sql);
+
+    if (!$res) {
+      return FALSE; // default
+    }
+
+    $assoc = $res->fetch_assoc();
+
+    return $assoc['nid'];
+  }
+
+  public function deleteSharedNode($nid) {
+    $table = $this->prefix . self::TABLE_NODE_SHARED;
+
+    $sql = <<<SQL
+DELETE FROM $table
+WHERE nid=$nid;
+SQL;
+
+    return $this->connection->query($sql);
+  }
+
   public function setSharedState($nid, $shared_state) {
     $table = $this->prefix . self::TABLE_NODE_SHARED;
 
@@ -188,17 +219,6 @@ SQL;
     $row = $res->fetch_assoc();
 
     return $row['shared_state'];
-  }
-
-  public function deleteSharedNode($nid) {
-    $table = $this->prefix . self::TABLE_NODE_SHARED;
-
-    $sql = <<<SQL
-DELETE FROM $table
-WHERE nid=$nid;
-SQL;
-
-    return $this->connection->query($sql);
   }
 }
 
