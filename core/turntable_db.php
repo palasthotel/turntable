@@ -226,7 +226,7 @@ SQL;
     $table = $this->prefix . self::TABLE_NODE_SHARED;
 
     $sql = <<<SQL
-SELECT master_node_id, shared_state
+SELECT master_node_id, shared_state, last_sync
 FROM $table;
 SQL;
 
