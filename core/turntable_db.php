@@ -134,6 +134,7 @@ class turntable_db_client extends turntable_db {
 
     $nid = $shared_node->nid;
     $shared_state = $shared_node->shared_state;
+    $master_node_id = $shared_node->master_node_id;
     $original_client_id = $shared_node->client_id;
     $original_client_nid = $shared_node->client_nid;
     $original_client_vid = $shared_node->revision_uid;
@@ -141,11 +142,11 @@ class turntable_db_client extends turntable_db {
 
     $sql = <<<SQL
 INSERT INTO $table
-  (nid, shared_state, original_client_id, original_client_nid, original_client_vid,
+  (nid, shared_state, master_node_id, original_client_id, original_client_nid, original_client_vid,
     last_sync)
 VALUES
-  ($nid, $shared_state, '$original_client_id', '$original_client_nid',
-     '$original_client_vid', '$last_sync');
+  ($nid, $shared_state, $master_node_id, '$original_client_id',
+     '$original_client_nid', '$original_client_vid', '$last_sync');
 SQL;
 
     $res = $this->connection->query($sql);
@@ -164,7 +165,9 @@ SQL;
 
     $res = $this->connection->query($sql);
 
-    if (!$res) {
+    debug($sql);
+
+    if (!$res || $res->num_rows == 0) {
       return FALSE; // default
     }
 
