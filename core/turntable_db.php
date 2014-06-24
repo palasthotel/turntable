@@ -205,6 +205,8 @@ SQL;
   public function setSharedLastSync($nid, $last_sync) {
     $table = $this->prefix . self::TABLE_NODE_SHARED;
 
+    $last_sync = date('Y-m-d H:i:s', $last_sync);
+
     $sql = <<<SQL
 UPDATE $table
 SET
