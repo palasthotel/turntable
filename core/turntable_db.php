@@ -88,30 +88,37 @@ class turntable_db_client extends turntable_db {
             'description' => t(
                 'Shared status: 0 = None, 1 = Copy, 2 = Reference, 3 = Original')
           ),
+          'master_node_id' => array(
+            'type' => 'int',
+            'unsigned' => TRUE,
+            'not null' => FALSE,
+            'default' => NULL,
+            'description' => t('Master node ID.')
+          ),
           'original_client_id' => array(
             'type' => 'varchar',
             'length' => 255,
-            'not null' => TRUE,
-            'default' => '',
+            'not null' => FALSE,
+            'default' => NULL,
             'description' => t('ID of the original client.')
           ),
           'original_client_nid' => array(
             'type' => 'int',
             'unsigned' => TRUE,
-            'not null' => TRUE,
-            'default' => 0,
+            'not null' => FALSE,
+            'default' => NULL,
             'description' => t('Original node ID.')
           ),
           'original_client_vid' => array(
             'type' => 'int',
             'unsigned' => TRUE,
-            'not null' => TRUE,
-            'default' => 0,
+            'not null' => FALSE,
+            'default' => NULL,
             'description' => t('Original node version ID.')
           ),
           'last_sync' => array(
             'mysql_type' => 'datetime',
-            'not null' => TRUE,
+            'not null' => NULL,
             'description' => t('Time of last sync.')
           )
         ),
