@@ -146,10 +146,8 @@ SQL;
     return $res;
   }
 
-  public function setSharedState($nid, $shared_node) {
+  public function setSharedState($nid, $shared_state) {
     $table = $this->prefix . self::TABLE_NODE_SHARED;
-
-    $shared_state = $shared_node['shared_state'];
 
     $sql = <<<SQL
 INSERT INTO $table
