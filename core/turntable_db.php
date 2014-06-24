@@ -405,10 +405,12 @@ SQL;
 
     $num_of_terms = count($search_terms);
 
+    // return empty result if no search term is given
     if ($num_of_terms == 1 && $search_terms[0] == '') {
       return array();
     }
 
+    // build the sql condition
     $sql_cond = '';
     for($i = 0; $i < $num_of_terms; ++ $i) {
       $term = $search_terms[$i];
@@ -421,7 +423,7 @@ SQL;
     }
 
     $sql = <<<SQL
-SELECT node.nid, node.title, ns.client_author_name as author, ns.last_sync
+SELECT node.nid, node.title, ns.client_id, ns.client_author_name as author, ns.last_sync
 FROM $table as ns, node
 WHERE node.nid=ns.nid
   AND $sql_cond
@@ -430,8 +432,12 @@ SQL;
 
     $res = $this->connection->query($sql);
 
+    // convert result set to array
     $results = array();
     while ($row = $res->fetch_assoc()) {
+      // ensure integer
+      $row['nid'] = (int) $row['nid'];
+
       $results[] = $row;
     }
 
