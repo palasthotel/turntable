@@ -89,10 +89,10 @@ class turntable_db_client extends turntable_db {
                 'Shared status: 0 = None, 1 = Copy, 2 = Reference, 3 = Original')
           ),
           'original_client_id' => array(
-            'type' => 'string',
-            'unsigned' => TRUE,
+            'type' => 'varchar',
+            'length' => 255,
             'not null' => TRUE,
-            'default' => 0,
+            'default' => '',
             'description' => t('ID of the original client.')
           ),
           'original_client_nid' => array(
@@ -211,9 +211,9 @@ class turntable_db_master extends turntable_db {
             'default' => 0,
             'description' => t('Local node ID.')
           ),
-          'client_url' => array(
+          'client_id' => array(
             'type' => 'varchar',
-            'length' => 32,
+            'length' => 255,
             'not null' => TRUE,
             'default' => '',
             'description' => t('ID of the original client.')
