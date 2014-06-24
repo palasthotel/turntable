@@ -93,7 +93,7 @@ class turntable_client {
     return $res;
   }
 
-  public function findSharedNode($query) {
+  public function findSharedNodes($query) {
     $url = $this->master_url . self::ENDPOINT_NODE_SHARED . '?query=' .
          urlencode($query);
 
