@@ -202,6 +202,22 @@ SQL;
     return $res;
   }
 
+  public function setSharedLastSync($nid, $last_sync) {
+    $table = $this->prefix . self::TABLE_NODE_SHARED;
+
+    $sql = <<<SQL
+UPDATE $table
+SET
+  last_sync='$last_sync'
+WHERE
+  nid=$nid;
+SQL;
+
+    $res = $this->connection->query($sql);
+
+    return $res;
+  }
+
   public function getSharedState($nid) {
     $table = $this->prefix . self::TABLE_NODE_SHARED;
 
