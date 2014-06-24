@@ -226,7 +226,7 @@ SQL;
     $table = $this->prefix . self::TABLE_NODE_SHARED;
 
     $sql = <<<SQL
-SELECT master_node_id, shared_state, last_sync
+SELECT nid, shared_state, master_node_id, last_sync
 FROM $table;
 SQL;
 
@@ -239,8 +239,9 @@ SQL;
     $result = array();
     while ($row = $res->fetch_assoc()) {
       // convert
-      $row['master_node_id'] = (int) $row['master_node_id'];
+      $row['nid'] = (int) $row['nid'];
       $row['shared_state'] = (int) $row['shared_state'];
+      $row['master_node_id'] = (int) $row['master_node_id'];
 
       $result[] = $row;
     }
