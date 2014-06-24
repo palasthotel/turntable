@@ -165,8 +165,6 @@ SQL;
 
     $res = $this->connection->query($sql);
 
-    debug($sql);
-
     if (!$res || $res->num_rows == 0) {
       return FALSE; // default
     }
