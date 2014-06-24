@@ -221,6 +221,32 @@ SQL;
 
     return $row['shared_state'];
   }
+
+  public function getSharedStates() {
+    $table = $this->prefix . self::TABLE_NODE_SHARED;
+
+    $sql = <<<SQL
+SELECT nid, shared_state
+FROM $table;
+SQL;
+
+    $res = $this->connection->query($sql);
+
+    if (!$res) {
+      return array(); // default
+    }
+
+    $result = array();
+    while ($row = $res->fetch_assoc()) {
+      // convert
+      $row['nid'] = (int) $row['nid'];
+      $row['shared_state'] = (int) $row['shared_state'];
+
+      $result[] = $row;
+    }
+
+    return $result;
+  }
 }
 
 /**
