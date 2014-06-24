@@ -189,6 +189,17 @@ SQL;
 
     return $row['shared_state'];
   }
+
+  public function deleteSharedNode($nid) {
+    $table = $this->prefix . self::TABLE_NODE_SHARED;
+
+    $sql = <<<SQL
+DELETE FROM $table
+WHERE nid=$nid;
+SQL;
+
+    return $this->connection->query($sql);
+  }
 }
 
 /**
