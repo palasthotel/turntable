@@ -62,6 +62,7 @@ class turntable_client {
    */
   public function uninstall() {
     // TODO what to do here?
+    // uninstalling currently undefined
   }
 
   public function setClientID($client_id) {

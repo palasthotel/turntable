@@ -49,5 +49,6 @@ class turntable_master {
    */
   public function uninstall() {
     // TODO what to do here?
+    // uninstalling currently undefined
   }
 }
