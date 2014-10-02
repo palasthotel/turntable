@@ -256,7 +256,7 @@ SQL;
 
     $result = array();
     while ($row = $res->fetch_assoc()) {
-      // convert
+      // convert strings to ints
       $row['nid'] = (int) $row['nid'];
       $row['shared_state'] = (int) $row['shared_state'];
       $row['master_node_id'] = (int) $row['master_node_id'];
@@ -341,13 +341,6 @@ class turntable_db_master extends turntable_db {
             'mysql_type' => 'datetime',
             'not null' => TRUE,
             'description' => t('Time of last sync.')
-          ),
-          'complete_content' => array(
-            'type' => 'text',
-            'size' => 'normal',
-            'not null' => TRUE,
-            'description' => t(
-                'Serialization of the complete content on the client.')
           )
         ),
         'primary key' => array(
@@ -436,8 +429,6 @@ SQL;
     $client_user_name = $shared_node['user_name'];
     $client_author_name = $shared_node['author_name'];
     $last_sync = date('Y-m-d H:i:s');
-    $complete_content = str_replace('\'', '\\\'',
-        $shared_node['complete_content']);
 
     $table = $this->prefix . self::TABLE_NODE_SHARED;
 
@@ -445,10 +436,9 @@ SQL;
     $query = <<<SQL
 INSERT INTO $table
   (nid, client_id, client_nid, client_vid, client_type, client_user_name,
-  client_author_name, last_sync, complete_content)
+  client_author_name, last_sync)
 VALUES ($nid, '$client_id', $client_nid, $client_vid, '$client_type',
-  '$client_user_name', '$client_author_name', '$last_sync',
-  '$complete_content');
+  '$client_user_name', '$client_author_name', '$last_sync');
 SQL;
 
     return $this->connection->query($query);
@@ -463,8 +453,6 @@ SQL;
     $client_user_name = $shared_node['user_name'];
     $client_author_name = $shared_node['author_name'];
     $last_sync = date('Y-m-d H:i:s');
-    $complete_content = str_replace('\'', '\\\'',
-        $shared_node['complete_content']);
 
     $table = $this->prefix . self::TABLE_NODE_SHARED;
 
@@ -474,8 +462,7 @@ SET client_vid=$client_vid,
   client_type='$client_type',
   client_user_name='$client_user_name',
   client_author_name='$client_author_name',
-  last_sync='$last_sync',
-  complete_content='$complete_content'
+  last_sync='$last_sync'
 WHERE nid=$nid;
 SQL;
 
@@ -499,17 +486,21 @@ SQL;
     for($i = 0; $i < $num_of_terms; ++ $i) {
       $term = $search_terms[$i];
       $esc_term = $this->connection->real_escape_string($term);
-      $sql_cond .= ' complete_content LIKE \'%' . $esc_term . '%\'';
+      $sql_cond .= 'body.body_value LIKE \'%' . $esc_term . '%\''."\n";
 
       if ($i + 1 < $num_of_terms) {
-        $sql_cond .= ' AND';
+        $sql_cond .= '  AND ';
       }
     }
 
+    $
+
     $sql = <<<SQL
 SELECT node.nid, node.title, ns.client_id, ns.client_author_name as author, ns.last_sync
-FROM $table as ns, node
+FROM $table as ns, node, field_data_body as body
 WHERE node.nid=ns.nid
+  AND node.nid=body.entity_id
+  AND body.bundle='shared'
   AND $sql_cond
 ORDER BY ns.last_sync DESC;
 SQL;
