@@ -486,14 +486,8 @@ SQL;
     for($i = 0; $i < $num_of_terms; ++ $i) {
       $term = $search_terms[$i];
       $esc_term = $this->connection->real_escape_string($term);
-      $sql_cond .= 'body.body_value LIKE \'%' . $esc_term . '%\''."\n";
-
-      if ($i + 1 < $num_of_terms) {
-        $sql_cond .= '  AND ';
-      }
+      $sql_cond .= '  AND body.body_value LIKE \'%' . $esc_term . '%\''."\n";
     }
-
-    $
 
     $sql = <<<SQL
 SELECT node.nid, node.title, ns.client_id, ns.client_author_name as author, ns.last_sync
@@ -501,7 +495,7 @@ FROM $table as ns, node, field_data_body as body
 WHERE node.nid=ns.nid
   AND node.nid=body.entity_id
   AND body.bundle='shared'
-  AND $sql_cond
+  $sql_cond
 ORDER BY ns.last_sync DESC;
 SQL;
 
