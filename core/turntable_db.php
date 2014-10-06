@@ -220,6 +220,24 @@ SQL;
     return $res;
   }
 
+  public function setSharedLastFileUpload($nid, $last_file_upload) {
+    $table = $this->prefix . self::TABLE_NODE_SHARED;
+
+    $last_sync = date('Y-m-d H:i:s', $last_sync);
+
+    $sql = <<<SQL
+UPDATE $table
+SET
+  last_file_upload='$last_file_upload'
+WHERE
+  nid=$nid;
+SQL;
+
+    $res = $this->connection->query($sql);
+
+    return $res;
+  }
+
   public function getSharedState($nid) {
     $table = $this->prefix . self::TABLE_NODE_SHARED;
 
