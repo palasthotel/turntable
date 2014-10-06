@@ -355,6 +355,12 @@ class turntable_db_master extends turntable_db {
             'default' => '',
             'description' => t('Origin author user name.')
           ),
+          'client_images' => array(
+            'type' => 'text',
+            'not null' => FALSE,
+            'default' => NULL,
+            'description' => t('JSON encoded array with image urls and fids on the client.')
+          ),
           'last_sync' => array(
             'mysql_type' => 'datetime',
             'not null' => TRUE,
@@ -446,6 +452,7 @@ SQL;
     $client_type = $shared_node['content_type'];
     $client_user_name = $shared_node['user_name'];
     $client_author_name = $shared_node['author_name'];
+    $client_images = $shared_node['images'];
     $last_sync = date('Y-m-d H:i:s');
 
     $table = $this->prefix . self::TABLE_NODE_SHARED;
@@ -454,9 +461,9 @@ SQL;
     $query = <<<SQL
 INSERT INTO $table
   (nid, client_id, client_nid, client_vid, client_type, client_user_name,
-  client_author_name, last_sync)
+  client_author_name, client_images, last_sync)
 VALUES ($nid, '$client_id', $client_nid, $client_vid, '$client_type',
-  '$client_user_name', '$client_author_name', '$last_sync');
+  '$client_user_name', '$client_author_name', '$client_images', '$last_sync');
 SQL;
 
     return $this->connection->query($query);
@@ -470,6 +477,7 @@ SQL;
     $client_type = $shared_node['content_type'];
     $client_user_name = $shared_node['user_name'];
     $client_author_name = $shared_node['author_name'];
+    $client_images = $shared_node['images'];
     $last_sync = date('Y-m-d H:i:s');
 
     $table = $this->prefix . self::TABLE_NODE_SHARED;
@@ -480,6 +488,7 @@ SET client_vid=$client_vid,
   client_type='$client_type',
   client_user_name='$client_user_name',
   client_author_name='$client_author_name',
+  client_images='$client_images',
   last_sync='$last_sync'
 WHERE nid=$nid;
 SQL;
@@ -504,7 +513,7 @@ SQL;
     for($i = 0; $i < $num_of_terms; ++ $i) {
       $term = $search_terms[$i];
       $esc_term = $this->connection->real_escape_string($term);
-      $sql_cond .= '  AND body.body_value LIKE \'%' . $esc_term . '%\''."\n";
+      $sql_cond .= '  AND body.body_value LIKE \'%' . $esc_term . '%\'' . "\n";
     }
 
     $sql = <<<SQL
