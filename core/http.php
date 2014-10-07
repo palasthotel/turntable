@@ -56,7 +56,7 @@ function http_req_open($method, $url, $headers = array(), $data = '') {
  * @param string $destination_path
  */
 function http_file_download($source_url, $destination_path) {
-  file_put_contents($destination_path, fopen($source_url, 'r'));
+  file_put_contents($destination_path, http_req_open('GET', $source_url));
 }
 
 function http_file_upload($source_file, $destination_url) {
