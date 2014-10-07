@@ -25,9 +25,28 @@ function http_req($method, $url, $headers = array(), $data = '') {
 
   $context = stream_context_create($options);
 
-  $response = file_get_contents($url, false, $context);
+  $response = file_get_contents($url, FALSE, $context);
 
   return $response;
+}
+
+function http_req_open($method, $url, $headers = array(), $data = '') {
+  $header = '';
+  foreach ($headers as $key => $value) {
+    $header .= $key . ': ' . $value . "\r\n";
+  }
+
+  $options = array(
+    'http' => array(
+      'method' => $method,
+      'header' => $header,
+      'content' => $data
+    )
+  );
+
+  $context = stream_context_create($options);
+
+  return fopen($url, 'r', FALSE, $context);
 }
 
 /**
