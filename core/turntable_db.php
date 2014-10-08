@@ -544,7 +544,7 @@ SQL;
     $table = $this->prefix . self::TABLE_NODE_SHARED;
 
     $sql = <<<SQL
-SELECT client_id, client_nid, client_vid, client_type, client_user_name, client_author_name, last_sync
+SELECT client_id, client_nid, client_vid, client_type, client_user_name, client_author_name, client_images, last_sync
 FROM $table
 WHERE nid=$nid
 SQL;
