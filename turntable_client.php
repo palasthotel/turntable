@@ -15,8 +15,12 @@ class turntable_client {
   const SHARED_REF = 2; // reference to a node on the master
   const SHARED_ORIG = 3; // original node (changes will be sent to master)
 
-  // master endpoint resource
+  // master endpoint resource (node-shared)
   const ENDPOINT_NODE_SHARED = 'api/turntable/v1/node-shared';
+
+  // master endpoint resource (image)
+  const ENDPOINT_IMAGE = 'api/turntable/v1/image';
+
 
   // instance field
   private static $instance = NULL;
@@ -113,5 +117,9 @@ class turntable_client {
     $res = http_req('GET', $url);
 
     return json_decode($res);
+  }
+
+  public function getImageURL($original_url) {
+    return $this->master_url . self::ENDPOINT_IMAGE . '?url=' . $original_url;
   }
 }
