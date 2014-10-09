@@ -309,6 +309,7 @@ SQL;
 class turntable_db_master extends turntable_db {
   const TABLE_NODE_SHARED = 'master_node_shared';
   const TABLE_NODE_SUBSCRIPTIONS = 'master_node_subscriptions';
+  const TABLE_ALLOWED_CLIENTS = 'master_allowed_clients';
 
   public function __construct($host, $port, $user, $password, $database,
       $prefix = '') {
@@ -374,7 +375,8 @@ class turntable_db_master extends turntable_db {
             'type' => 'text',
             'not null' => FALSE,
             'default' => NULL,
-            'description' => t('JSON encoded array with image urls and fids on the client.')
+            'description' => t(
+                'JSON encoded array with image urls and fids on the client.')
           ),
           'last_sync' => array(
             'mysql_type' => 'datetime',
@@ -423,6 +425,22 @@ class turntable_db_master extends turntable_db {
         ),
         'primary key' => array(
           'sync_id'
+        )
+      ),
+      $this->prefix . self::TABLE_ALLOWED_CLIENTS => array(
+        // Table description
+        'description' => t(
+            'IDs of clients that are allowed to communicate with the master.'),
+        'fields' => array(
+          'client_id' => array(
+            'type' => 'varchar',
+            'length' => 255,
+            'not null' => TRUE,
+            'description' => t('ID of allowed client.')
+          )
+        ),
+        'primary key' => array(
+          'client_id'
         )
       )
     );
@@ -584,5 +602,46 @@ WHERE nid=$nid;
 SQL;
 
     return $this->connection->query($sql);
+  }
+
+  public function getAllowedClients() {
+    $table = $this->prefix . self::TABLE_ALLOWED_CLIENTS;
+
+    $sql = <<<SQL
+SELECT client_id
+FROM $table;
+SQL;
+
+    $res = $this->connection->query($sql);
+    $client_ids = array();
+
+    while ($rec = $res->fetch_assoc()) {
+      $client_ids[] = $rec['client_id'];
+    }
+
+    return $client_ids;
+  }
+
+  public function setAllowedClients($allowed_client_ids) {
+    $table = $this->prefix . self::TABLE_ALLOWED_CLIENTS;
+
+    $values = '(\'' . implode('\',\'', $allowed_client_ids) . '\')';
+
+    // truncate the table and set the new array of client ids
+    $sql = <<<SQL
+TRUNCATE TABLE $table;
+INSERT INTO $table
+  (client_id)
+VALUES
+  $values;
+SQL;
+
+    $res = $this->connection->multi_query($sql);
+
+    if ($res !== FALSE) {
+      return $this->connection->next_result();
+    } else {
+      return $res;
+    }
   }
 }
