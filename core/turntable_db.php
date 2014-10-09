@@ -309,7 +309,7 @@ SQL;
 class turntable_db_master extends turntable_db {
   const TABLE_NODE_SHARED = 'master_node_shared';
   const TABLE_NODE_SUBSCRIPTIONS = 'master_node_subscriptions';
-  const TABLE_ENABELD_CLIENTS = 'master_enabled_clients';
+  const TABLE_ENABLED_CLIENTS = 'master_enabled_clients';
 
   public function __construct($host, $port, $user, $password, $database,
       $prefix = '') {
@@ -427,7 +427,7 @@ class turntable_db_master extends turntable_db {
           'sync_id'
         )
       ),
-      $this->prefix . self::TABLE_ALLOWED_CLIENTS => array(
+      $this->prefix . self::TABLE_ENABLED_CLIENTS => array(
         // Table description
         'description' => t(
             'IDs of clients that are allowed to communicate with the master.'),
