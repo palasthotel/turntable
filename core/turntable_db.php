@@ -309,7 +309,6 @@ SQL;
 class turntable_db_master extends turntable_db {
   const TABLE_NODE_SHARED = 'master_node_shared';
   const TABLE_NODE_SUBSCRIPTIONS = 'master_node_subscriptions';
-  const TABLE_ENABLED_CLIENTS = 'master_enabled_clients';
 
   public function __construct($host, $port, $user, $password, $database,
       $prefix = '') {
@@ -425,22 +424,6 @@ class turntable_db_master extends turntable_db {
         ),
         'primary key' => array(
           'sync_id'
-        )
-      ),
-      $this->prefix . self::TABLE_ENABLED_CLIENTS => array(
-        // Table description
-        'description' => t(
-            'IDs of clients that are allowed to communicate with the master.'),
-        'fields' => array(
-          'client_id' => array(
-            'type' => 'varchar',
-            'length' => 255,
-            'not null' => TRUE,
-            'description' => t('ID of allowed client.')
-          )
-        ),
-        'primary key' => array(
-          'client_id'
         )
       )
     );
@@ -602,46 +585,5 @@ WHERE nid=$nid;
 SQL;
 
     return $this->connection->query($sql);
-  }
-
-  public function getEnabledClients() {
-    $table = $this->prefix . self::TABLE_ENABLED_CLIENTS;
-
-    $sql = <<<SQL
-SELECT client_id
-FROM $table;
-SQL;
-
-    $res = $this->connection->query($sql);
-    $client_ids = array();
-
-    while ($rec = $res->fetch_assoc()) {
-      $client_ids[] = $rec['client_id'];
-    }
-
-    return $client_ids;
-  }
-
-  public function setEnabledClients($enabled_client_ids) {
-    $table = $this->prefix . self::TABLE_ENABLED_CLIENTS;
-
-    $values = '(\'' . implode('\'),(\'', $enabled_client_ids) . '\')';
-
-    // truncate the table and set the new array of client ids
-    $sql = <<<SQL
-TRUNCATE TABLE $table;
-INSERT INTO $table
-  (client_id)
-VALUES
-  $values;
-SQL;
-
-    $res = $this->connection->multi_query($sql);
-
-    if ($res !== FALSE) {
-      return $this->connection->next_result();
-    } else {
-      return $res;
-    }
   }
 }
