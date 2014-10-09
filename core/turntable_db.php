@@ -309,7 +309,7 @@ SQL;
 class turntable_db_master extends turntable_db {
   const TABLE_NODE_SHARED = 'master_node_shared';
   const TABLE_NODE_SUBSCRIPTIONS = 'master_node_subscriptions';
-  const TABLE_ALLOWED_CLIENTS = 'master_allowed_clients';
+  const TABLE_ENABELD_CLIENTS = 'master_enabled_clients';
 
   public function __construct($host, $port, $user, $password, $database,
       $prefix = '') {
@@ -604,8 +604,8 @@ SQL;
     return $this->connection->query($sql);
   }
 
-  public function getAllowedClients() {
-    $table = $this->prefix . self::TABLE_ALLOWED_CLIENTS;
+  public function getEnabledClients() {
+    $table = $this->prefix . self::TABLE_ENABLED_CLIENTS;
 
     $sql = <<<SQL
 SELECT client_id
@@ -622,10 +622,10 @@ SQL;
     return $client_ids;
   }
 
-  public function setAllowedClients($allowed_client_ids) {
-    $table = $this->prefix . self::TABLE_ALLOWED_CLIENTS;
+  public function setEnabledClients($enabled_client_ids) {
+    $table = $this->prefix . self::TABLE_ENABLED_CLIENTS;
 
-    $values = '(\'' . implode('\',\'', $allowed_client_ids) . '\')';
+    $values = '(\'' . implode('\',\'', $enabled_client_ids) . '\')';
 
     // truncate the table and set the new array of client ids
     $sql = <<<SQL
