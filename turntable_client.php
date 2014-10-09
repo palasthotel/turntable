@@ -86,11 +86,9 @@ class turntable_client {
     $url = $this->master_url . self::ENDPOINT_NODE_SHARED;
 
     $headers = array(
-      'Content-Type' => 'application/json'
+      'Content-Type' => 'application/json',
+      'Turntable-Client-ID' => $this->client_id
     );
-
-    // add client id
-    $shared_node['client_id'] = $this->client_id;
 
     // send the request with JSON encoded data
     $res = http_req('POST', $url, $headers, json_encode($shared_node));
@@ -103,7 +101,8 @@ class turntable_client {
          urlencode($query);
 
     $headers = array(
-      'Content-Type' => 'application/json'
+      'Content-Type' => 'application/json',
+      'Turntable-Client-ID' => $this->client_id
     );
 
     $res = http_req('GET', $url, $headers);
@@ -114,7 +113,13 @@ class turntable_client {
   public function getSharedNode($nid) {
     $url = $this->master_url . self::ENDPOINT_NODE_SHARED . '/' . $nid;
 
-    $res = http_req('GET', $url);
+    // set client id in http header
+    $headers = array(
+      'Turntable-Client-ID' => $this->client_id
+    );
+
+    // request shared node
+    $res = http_req('GET', $url, $headers);
 
     return json_decode($res);
   }
