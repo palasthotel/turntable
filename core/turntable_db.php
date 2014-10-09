@@ -625,7 +625,7 @@ SQL;
   public function setEnabledClients($enabled_client_ids) {
     $table = $this->prefix . self::TABLE_ENABLED_CLIENTS;
 
-    $values = '(\'' . implode('\',\'', $enabled_client_ids) . '\')';
+    $values = '(\'' . implode('\'),(\'', $enabled_client_ids) . '\')';
 
     // truncate the table and set the new array of client ids
     $sql = <<<SQL
