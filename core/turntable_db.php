@@ -185,21 +185,6 @@ SQL;
     return $this->connection->query($sql);
   }
 
-  public function setSharedStateIgnoreExisting($nid, $shared_state) {
-    $table = $this->prefix . self::TABLE_NODE_SHARED;
-
-    $sql = <<<SQL
-INSERT IGNORE INTO $table
-  (nid, shared_state)
-VALUES
-  ($nid, $shared_state);
-SQL;
-
-    $res = $this->connection->query($sql);
-
-    return $res;
-  }
-
   public function setSharedState($nid, $shared_state) {
     $table = $this->prefix . self::TABLE_NODE_SHARED;
 
