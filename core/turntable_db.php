@@ -299,6 +299,29 @@ SQL;
 
     return $result;
   }
+
+  public function getRemainingSharedNodes() {
+    $table = $this->prefix . self::TABLE_NODE_SHARED;
+
+    $sql = <<<SQL
+SELECT nid
+FROM $table
+WHERE shared_state = 3 AND last_sync IS NULL;
+SQL;
+
+    $res = $this->connection->query($sql);
+
+    $nids = array();
+    if (!$res || $res->num_rows === 0) {
+      return $nids; // default = empty array
+    }
+
+    while ($rec = $res->fetch_assoc()) {
+      $nids[] = (int) $rec['nid'];
+    }
+
+    return $nids;
+  }
 }
 
 /**
