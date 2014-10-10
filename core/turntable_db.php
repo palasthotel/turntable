@@ -82,9 +82,9 @@ class turntable_db_client extends turntable_db {
           'shared_state' => array(
             'type' => 'int',
             'size' => 'tiny',
-            'unsigned' => TRUE,
+            'unsigned' => FALSE,
             'not null' => TRUE,
-            'default' => 0,
+            'default' => -1,
             'description' => t(
                 'Shared status: 0 = None, 1 = Copy, 2 = Reference, 3 = Original')
           ),
