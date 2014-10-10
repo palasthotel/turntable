@@ -264,7 +264,7 @@ SQL;
 
     $res = $this->connection->query($sql);
 
-    if (!$res) {
+    if (!$res || $res->num_rows === 0) {
       return -1; // default
     }
 
