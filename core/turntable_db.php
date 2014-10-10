@@ -270,7 +270,7 @@ SQL;
 
     $row = $res->fetch_assoc();
 
-    return $row['shared_state'];
+    return (int) $row['shared_state'];
   }
 
   public function getSharedStates() {
