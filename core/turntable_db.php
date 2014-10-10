@@ -265,7 +265,7 @@ SQL;
     $res = $this->connection->query($sql);
 
     if (!$res) {
-      return -1; // default
+      return FALSE; // default
     }
 
     $row = $res->fetch_assoc();
