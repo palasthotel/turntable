@@ -46,7 +46,7 @@ Install all prerequisites first. Then [download this repository][this-zip] and
 On every client, extract and upload *turntable* to
 `sites/all/libraries/turntable`. Extract and upload *turntable-drupal* to
 `sites/all/modules/turntable`. Temporarily turn off cron. Install and enable
-"Turntable Client" in the Modules section of the administration interface. Clear
+"Turntable Client" in the modules section of the administration interface. Clear
 Drupal's cache.
 
 In the configuration (admin/config/turntable-client/settings), set the URL of
@@ -59,7 +59,7 @@ which node types should be shared by default.
 
 Extract and upload *turntable* to `sites/all/libraries/turntable`. Extract and
 upload *turntable-drupal* to `sites/all/modules/turntable`. Install and enable
-"Turntable Master" in the Modules section of the administration interface. Clear
+"Turntable Master" in the modules section of the administration interface. Clear
 the cache.
 
 After that you need to enable the JSON API in the resource configuration
@@ -72,6 +72,9 @@ master. In the master's configuration settings you have to enter all IDs of the
 clients that are allowed to send and fetch content from the master.
 
 After that, you can re-enable cron on the clients. They will start to upload the
-default nodes during the next run of cron. Furthermore, you can specify if a
-node should be uploaded when editing it. It will also be uploaded, once it is
-saved for the next time.
+default nodes during the next run of cron. Furthermore, you can define if a node
+should be uploaded in the tab "Turntable" that is visible when you edit a node.
+The node will also be uploaded, once it is saved for the next time.
+
+You can import remote nodes by copy or by reference in the tab "Turntable
+Search" in the content section of the administration interface.
