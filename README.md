@@ -19,14 +19,15 @@ original node's changes. Copies won't ever be changed.
 
 On every client, these Drupal modules have to be installed and enabled first:
 
-  1. [entity]
+ 1. [entity]
 
 On the master, these Drupal modules need to be installed and enabled:
 
-  1. [ctools]
-  2. [entity]
-  3. [libraries]
-  4. [services]
+ 1. [ctools]
+ 2. [entity]
+ 3. [libraries]
+ 4. [services]
+      - REST Server
 
 [ctools]: https://www.drupal.org/project/ctools
 [entity]: https://www.drupal.org/project/entity
