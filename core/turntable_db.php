@@ -32,7 +32,7 @@ abstract class turntable_db {
   protected function __construct($host, $port, $user, $password, $database,
       $prefix = '') {
     // set default port
-    if ($port == '') {
+    if ($port == null) {
       $port = 3306;
     }
 
