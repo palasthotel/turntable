@@ -27,7 +27,7 @@ On the master, these Drupal modules need to be installed and enabled:
  2. [entity]
  3. [libraries]
  4. [services]
-      - REST Server
+      - only the REST Server needs to be enabled
 
 [ctools]: https://www.drupal.org/project/ctools
 [entity]: https://www.drupal.org/project/entity
