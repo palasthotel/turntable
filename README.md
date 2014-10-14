@@ -75,7 +75,7 @@ clients that are allowed to send and fetch content from the master.
 After that, you can re-enable cron on the clients. They will start to upload the
 default nodes during the next run of cron. Furthermore, you can define if a node
 should be uploaded in the tab "Turntable" that is visible when you edit a node.
-The node will also be uploaded, once it is saved for the next time.
+The node will also be uploaded once it is saved for the next time.
 
 You can import remote nodes by copy or by reference in the tab "Turntable
 Search" in the content section of the administration interface.
