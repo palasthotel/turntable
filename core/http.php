@@ -17,17 +17,17 @@ function http_req($method, $url, $headers = array(), $data = '') {
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); // Set curl to return the data instead of printing it to the browser.
   curl_setopt($ch, CURLOPT_URL, $url);
 
+  if (is_array($headers) && sizeof($headers) > 0) {
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+  }
+
   if ($method == 'GET' || $method == 'get') {
     curl_setopt($ch, CURLOPT_HTTPGET, TRUE);
   } else if ($method == 'POST' || $method == 'post') {
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+    curl_setopt($ch, CURLOPT_POST, TRUE);
     if ($data) {
       curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
     }
-  }
-
-  if (is_array($headers) && sizeof($headers) > 0) {
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
   }
 
   $data = curl_exec($ch);
