@@ -285,13 +285,13 @@ SQL;
     return $result;
   }
 
-  public function getRemainingSharedNodes() {
+  public function getRemainingSharedNodes($limit) {
     $table = $this->prefix . self::TABLE_NODE_SHARED;
 
     $sql = <<<SQL
 SELECT nid
 FROM $table
-WHERE shared_state = 3 AND last_sync IS NULL;
+WHERE shared_state = 3 AND last_sync IS NULL LIMIT $limit;
 SQL;
 
     $res = $this->connection->query($sql);
