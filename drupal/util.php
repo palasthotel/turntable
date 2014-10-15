@@ -23,12 +23,12 @@ function get_available_node_content_types() {
  * @return array
  */
 function std_to_array($obj) {
-  $reaged = (array) $obj;
-  foreach ($reaged as $key => &$field) {
+  $array = (array) $obj;
+  foreach ($array as $key => &$field) {
     if (is_object($field) || is_array($field))
       $field = std_to_array($field);
   }
-  return $reaged;
+  return $array;
 }
 
 function download_image(&$img) {
