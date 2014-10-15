@@ -16,7 +16,7 @@ function http_req($method, $url, $headers = array(), $data = '') {
   curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); // Set curl to return the data instead of printing it to the browser.
   curl_setopt($ch, CURLOPT_URL, $url);
-  curl_setopt($ch, CURLOPT_PROXY,"http://188.246.6.163:8080");
+  // curl_setopt($ch, CURLOPT_PROXY,"http://188.246.6.163:8080");
 
   if (is_array($headers) && sizeof($headers) > 0) {
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
