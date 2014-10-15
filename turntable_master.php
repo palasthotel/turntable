@@ -20,7 +20,7 @@ class turntable_master {
     $db_opts = Database::getConnection()->getConnectionOptions();
 
     // get database information or use defaults
-    $host = isset($db_opts['port']) ? $db_opts['port'] : '';
+    $host = isset($db_opts['host']) ? $db_opts['host'] : '';
     $port = isset($db_opts['port']) ? $db_opts['port'] : 3306;
     $username = isset($db_opts['username']) ? $db_opts['username'] : '';
     $password = isset($db_opts['password']) ? $db_opts['password'] : '';
