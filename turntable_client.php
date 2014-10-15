@@ -93,6 +93,7 @@ class turntable_client {
     $url = $this->master_url . self::ENDPOINT_NODE_SHARED;
 
     $headers = array(
+      'Accept: application/json',
       'Content-Type: application/json',
       'Turntable-Client-ID: ' . $this->client_id
     );
@@ -110,6 +111,7 @@ class turntable_client {
          urlencode($query);
 
     $headers = array(
+      'Accept: application/json',
       'Content-Type: application/json',
       'Turntable-Client-ID: ' . $this->client_id
     );
@@ -124,6 +126,7 @@ class turntable_client {
 
     // set client id in http header
     $headers = array(
+      'Accept: application/json',
       'Turntable-Client-ID: ' . $this->client_id
     );
 
