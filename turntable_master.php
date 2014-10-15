@@ -17,13 +17,18 @@ class turntable_master {
    * Creates the new Turntable Master.
    */
   private function __construct() {
-    $db_conn = Database::getConnection();
-    $db_opts = $db_conn->getConnectionOptions();
+    $db_opts = Database::getConnection()->getConnectionOptions();
 
-    $port = isset($db_opts['port']) ? $db_opts['port'] : null;
+    // get database information or use defaults
+    $host = isset($db_opts['port']) ? $db_opts['port'] : '';
+    $port = isset($db_opts['port']) ? $db_opts['port'] : 3306;
+    $username = isset($db_opts['username']) ? $db_opts['username'] : '';
+    $password = isset($db_opts['password']) ? $db_opts['password'] : '';
+    $database = isset($db_opts['database']) ? $db_opts['database'] : '';
+
     // use custom db connection
-    $this->db = new turntable_db_client($db_opts['host'], $port,
-        $db_opts['username'], $db_opts['password'], $db_opts['database']);
+    $this->db = new turntable_db_client($host, $port, $username, $password,
+        $database);
   }
 
   public static function getInstance() {
