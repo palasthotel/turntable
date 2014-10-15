@@ -1,6 +1,4 @@
 <?php
-require_once './sites/all/libraries/turntable/drupal/images.php';
-
 /**
  * Returns an array of all available node content types.
  *
