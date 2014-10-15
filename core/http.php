@@ -20,7 +20,7 @@ function http_req($method, $url, $headers = array(), $data = '') {
   if ($method == 'GET' || $method == 'get') {
     curl_setopt($ch, CURLOPT_HTTPGET, TRUE);
   } else if ($method == 'POST' || $method == 'post') {
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
     if ($data) {
       curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
     }
