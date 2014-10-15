@@ -20,8 +20,9 @@ class turntable_master {
     $db_conn = Database::getConnection();
     $db_opts = $db_conn->getConnectionOptions();
 
+    $port = isset($db_opts['port']) ? $db_opts['port'] : null;
     // use custom db connection
-    $this->db = new turntable_db_master($db_opts['host'], $db_opts['port'],
+    $this->db = new turntable_db_client($db_opts['host'], $port,
         $db_opts['username'], $db_opts['password'], $db_opts['database']);
   }
 
