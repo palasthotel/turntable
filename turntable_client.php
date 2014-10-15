@@ -97,6 +97,8 @@ class turntable_client {
       'Turntable-Client-ID' => $this->client_id
     );
 
+    $shared_node['client_id'] = $this->client_id;
+
     // send the request with JSON encoded data
     $res = http_req('POST', $url, $headers, json_encode($shared_node));
 
