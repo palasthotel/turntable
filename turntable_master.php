@@ -27,7 +27,7 @@ class turntable_master {
     $database = isset($db_opts['database']) ? $db_opts['database'] : '';
 
     // use custom db connection
-    $this->db = new turntable_db_client($host, $port, $username, $password,
+    $this->db = new turntable_db_master($host, $port, $username, $password,
         $database);
   }
 
