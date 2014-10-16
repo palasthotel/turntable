@@ -65,18 +65,17 @@ function ensure_image_is_available($image_dir_uri, $fname, $img_url,
   return $info;
 }
 
-function download_image(&$img) {
-  $dir = 'public://field/image/';
-  $fname = url_to_filename($img['uri']);
+function download_image($original_image_url) {
+  $dir = 'public://turntable_files/';
+  $fname = url_to_filename($original_image_url);
 
   $turntable_client = turntable_client::getInstance();
-  $url = $turntable_client->getImageURL($img['uri']);
+  $master_url = $turntable_client->getImageURL($original_image_url);
 
-  $info = ensure_image_is_available($dir, $fname, $url);
+  $info = ensure_image_is_available($dir, $fname, $master_url);
 
   if (isset($info['fid'])) {
-    $img['local_fid'] = $info['fid'];
-    return TRUE;
+    return $info['fid'];
   } else {
     return FALSE;
   }
