@@ -30,20 +30,3 @@ function std_to_array($obj) {
   }
   return $array;
 }
-
-function download_image(&$img) {
-  $dir = 'public://field/image/';
-  $fname = url_to_filename($img['uri']);
-
-  $turntable_client = turntable_client::getInstance();
-  $url = $turntable_client->getImageURL($img['uri']);
-
-  $info = ensure_image_is_available($dir, $fname, $url);
-
-  if (isset($info['fid'])) {
-    $img['local_fid'] = $info['fid'];
-    return TRUE;
-  } else {
-    return FALSE;
-  }
-}
