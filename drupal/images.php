@@ -106,7 +106,16 @@ function get_image_url($image) {
  */
 function resolve_image_references($ewrapper, array $image_refs,
     $show_messages = FALSE) {
-  $info = $ewrapper->getPropertyInfo();
+  try {
+    $info = $ewrapper->getPropertyInfo();
+  } catch (EntityMetadataWrapperException $e) {
+    if ($show_messages) {
+      drupal_set_message(
+          t('Could not import the node due to incompatible fields.'), 'warning');
+    }
+    return FALSE;
+  }
+
   // walk fields
   foreach ($info as $field => $field_properties) {
     $is_list = FALSE;
