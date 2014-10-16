@@ -83,3 +83,14 @@ function download_image($original_image_url) {
     return FALSE;
   }
 }
+
+function get_image_url($image) {
+  if (isset($image['uri'])) {
+    $uri = $image['uri'];
+  } else {
+    $file = file_load($image['fid']);
+    $uri = $file->uri;
+  }
+
+  return file_create_url($uri);
+}
