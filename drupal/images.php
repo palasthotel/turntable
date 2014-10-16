@@ -94,3 +94,83 @@ function get_image_url($image) {
 
   return file_create_url($uri);
 }
+
+/**
+ * Downloads required images and replaces original image fids with local fids.
+ *
+ * @param entity_metadata_wrapper $ewrapper
+ * @param array $image_refs
+ * @param boolean $show_messages
+ *          whether to show messages or not
+ */
+function resolve_image_references($ewrapper, array $image_refs,
+    $show_messages = FALSE) {
+  $info = $ewrapper->getPropertyInfo();
+  // walk fields
+  foreach ($info as $field => $field_properties) {
+    $is_list = FALSE;
+    $type = NULL;
+    $inner_type = FALSE;
+
+    // classify the field
+    classify_field($field, $field_properties, $is_list, $type, $inner_type);
+    if ($type === 'field_item_image') {
+      // check if the field is an image
+      // get fid and uri/url of single image refs
+      $image = $ewrapper->$field->value();
+      // track if something changed
+      $change = FALSE;
+      // find a relevant image_ref, then download the image and replace the fid
+      foreach ($image_refs as $image_ref) {
+        if ($image['fid'] == $image_ref['fid']) {
+          $new_img = download_image($image_ref['uri']);
+          if ($new_img !== FALSE) {
+            $image['fid'] = $new_img['fid'];
+            $image['uri'] = $new_img['uri'];
+            $change = TRUE;
+          } else {
+            if ($show_messages) {
+              drupal_set_message(t('Could not download an image.'), 'warning');
+            }
+            return;
+          }
+        }
+      }
+      if ($change) {
+        // if something changed, save the changes
+        $ewrapper->$field->set($image);
+      }
+    } else if ($inner_type === 'field_item_image') {
+      // check if the field is a list of images
+
+      // track if something changed
+      $change = FALSE;
+
+      $images = $ewrapper->$field->value();
+
+      foreach ($images as &$image) {
+        // find a relevant image_ref, then download the image and replace the fid
+        foreach ($image_refs as $image_ref) {
+          if ($image['fid'] == $image_ref['fid']) {
+            $new_img = download_image($image_ref['uri']);
+            if ($new_img !== FALSE) {
+              $image['fid'] = $new_img['fid'];
+              $image['uri'] = $new_img['uri'];
+              $change = TRUE;
+            } else {
+              if ($show_messages) {
+                drupal_set_message(t('Could not download an image.'), 'warning');
+              }
+              return;
+            }
+          }
+        }
+      }
+
+      if ($change) {
+        // if something changed, save the changes
+        $ewrapper->$field->set($images);
+      }
+    }
+  }
+}
