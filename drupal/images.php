@@ -102,6 +102,7 @@ function get_image_url($image) {
  * @param array $image_refs
  * @param boolean $show_messages
  *          whether to show messages or not
+ * @return boolean success
  */
 function resolve_image_references($ewrapper, array $image_refs,
     $show_messages = FALSE) {
@@ -132,7 +133,7 @@ function resolve_image_references($ewrapper, array $image_refs,
             if ($show_messages) {
               drupal_set_message(t('Could not download an image.'), 'warning');
             }
-            return;
+            return FALSE;
           }
         }
       }
@@ -161,7 +162,7 @@ function resolve_image_references($ewrapper, array $image_refs,
               if ($show_messages) {
                 drupal_set_message(t('Could not download an image.'), 'warning');
               }
-              return;
+              return FALSE;
             }
           }
         }
@@ -173,4 +174,6 @@ function resolve_image_references($ewrapper, array $image_refs,
       }
     }
   }
+
+  return TRUE;
 }
