@@ -48,6 +48,7 @@ function ensure_image_is_available($image_dir_uri, $fname, $img_url,
 
     $info = array(
       'fid' => $finfo->fid,
+      'uri' => $local_uri,
       'width' => $img_info[0],
       'height' => $img_info[1],
       'extension' => pathinfo($finfo->filename, PATHINFO_EXTENSION),
@@ -59,7 +60,9 @@ function ensure_image_is_available($image_dir_uri, $fname, $img_url,
         file_load_multiple(array(), array(
           'uri' => $local_uri
         )));
+
     $info['fid'] = $finfo->fid;
+    $info['uri'] = $local_uri;
   }
 
   return $info;
@@ -75,7 +78,7 @@ function download_image($original_image_url) {
   $info = ensure_image_is_available($dir, $fname, $master_url);
 
   if (isset($info['fid'])) {
-    return $info['fid'];
+    return $info;
   } else {
     return FALSE;
   }
