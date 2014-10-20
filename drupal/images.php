@@ -169,7 +169,7 @@ function resolve_image_references($ewrapper, array $image_refs,
               $change = TRUE;
             } else {
               if ($show_messages) {
-                drupal_set_message(t('Could not download an image.'), 'warning');
+                drupal_set_message(t('Could not download an image.'), 'error');
               }
               return FALSE;
             }
