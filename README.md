@@ -64,9 +64,19 @@ upload *turntable-drupal* to `sites/all/modules/turntable`. Install and enable
 the cache.
 
 After that you need to enable the JSON API in the resource configuration
-interface (admin/structure/services/list/turntable_master_v1/resources).
-Therefore, check the two resources "image" and "node-shared". Save your settings
-and clear the cache again.
+interface. Therefore you have to manually create an endpoint first. This can be
+done in admin/structure/services. Use the following settings:
+
+  - Machine-readable name of the endpoint: turntable_master_v1
+  - Server: REST
+  - Path to endpoint: api/turntable/v1
+  - Debug mode can be disabled, but it can be helpful to enable it to ensure it
+    is working properly.
+  - Session authentication can be disabled, too.
+
+After saving the settings, go to the "resources" tab that has. Check the two
+resources "image" and "node-shared". Save your settings and clear the cache
+again.
 
 As a last step, you need to enable clients to share their content with the
 master. In the master's configuration settings you have to enter all IDs of the
