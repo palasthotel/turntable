@@ -15,6 +15,7 @@ function ensure_image_is_available($image_dir_uri, $fname, $img_url,
 
   // check if image already exists
   $info = image_get_info($local_uri);
+
   if ($info === FALSE) {
     // prepare the directory
     if (!file_prepare_directory($image_dir_uri, FILE_CREATE_DIRECTORY)) {
@@ -24,7 +25,7 @@ function ensure_image_is_available($image_dir_uri, $fname, $img_url,
     }
 
     // download the file
-    $finfo = system_retrieve_file($img_url, $local_uri, FALSE,
+    $finfo = system_retrieve_file($img_url, $local_uri, $add_to_db,
         FILE_EXISTS_REPLACE);
     if ($finfo === FALSE) {
       return array(
@@ -34,17 +35,17 @@ function ensure_image_is_available($image_dir_uri, $fname, $img_url,
 
     $img_info = getimagesize($local_uri);
 
-    if ($add_to_db) {
-      $entity_type = 'image';
-      $entity = entity_create($entity_type);
+    // if ($add_to_db) {
+    // $entity_type = 'image';
+    // $entity = entity_create($entity_type, array());
 
-      // set meta data
-      $ewrapper = entity_metadata_wrapper($entity_type, $entity);
-      $ewrapper->field_image_fid->set($finfo->fid);
-      $ewrapper->field_image_width->set($img_info[0]);
-      $ewrapper->field_image_height->set($img_info[1]);
-      $ewrapper->save();
-    }
+    // // set meta data
+    // $ewrapper = entity_metadata_wrapper($entity_type, $entity);
+    // $ewrapper->field_image_fid->set($finfo->fid);
+    // $ewrapper->field_image_width->set($img_info[0]);
+    // $ewrapper->field_image_height->set($img_info[1]);
+    // $ewrapper->save();
+    // }
 
     $info = array(
       'fid' => $finfo->fid,
@@ -61,21 +62,23 @@ function ensure_image_is_available($image_dir_uri, $fname, $img_url,
           'uri' => $local_uri
         )));
 
-    $info['fid'] = $finfo->fid;
-    $info['uri'] = $local_uri;
+    if ($finfo) {
+      $info['fid'] = $finfo->fid;
+      $info['uri'] = $local_uri;
+    }
   }
 
   return $info;
 }
 
-function download_image($original_image_url) {
+function download_image($original_image_url, $add_to_db = FALSE) {
   $dir = 'public://turntable_files/';
   $fname = url_to_filename($original_image_url);
 
   $turntable_client = turntable_client::getInstance();
   $master_url = $turntable_client->getImageURL($original_image_url);
 
-  $info = ensure_image_is_available($dir, $fname, $master_url);
+  $info = ensure_image_is_available($dir, $fname, $master_url, $add_to_db);
 
   if (isset($info['fid'])) {
     return $info;
@@ -133,7 +136,7 @@ function resolve_image_references($ewrapper, array $image_refs,
       // find a relevant image_ref, then download the image and replace the fid
       foreach ($image_refs as $image_ref) {
         if ($image['fid'] == $image_ref['fid']) {
-          $new_img = download_image($image_ref['uri']);
+          $new_img = download_image($image_ref['uri'], TRUE);
           if ($new_img !== FALSE) {
             $image['fid'] = $new_img['fid'];
             $image['uri'] = $new_img['uri'];
