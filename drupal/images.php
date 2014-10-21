@@ -1,4 +1,5 @@
 <?php
+require_once './sites/all/libraries/turntable/core/util.php';
 
 /**
  * Ensures that the image at $image_dir_uri . $fname is available. If it is not
@@ -15,8 +16,20 @@ function ensure_image_is_available($image_dir_uri, $fname, $img_url,
 
   // check if image already exists
   $info = image_get_info($local_uri);
+  if ($info !== FALSE) {
+    // retrieve its file id
+    $finfo = reset(
+        file_load_multiple(array(), array(
+            'uri' => $local_uri
+        )));
 
-  if ($info === FALSE) {
+    if ($finfo) {
+      $info['fid'] = $finfo->fid;
+      $info['uri'] = $local_uri;
+    }
+  }
+
+  if ($info === FALSE || !isset($info['fid'])) {
     // prepare the directory
     if (!file_prepare_directory($image_dir_uri, FILE_CREATE_DIRECTORY)) {
       return array(
@@ -56,16 +69,6 @@ function ensure_image_is_available($image_dir_uri, $fname, $img_url,
       'mime_type' => $finfo->filemime,
       'file_size' => $finfo->filesize
     );
-  } else {
-    $finfo = reset(
-        file_load_multiple(array(), array(
-          'uri' => $local_uri
-        )));
-
-    if ($finfo) {
-      $info['fid'] = $finfo->fid;
-      $info['uri'] = $local_uri;
-    }
   }
 
   return $info;
@@ -165,7 +168,7 @@ function resolve_image_references($ewrapper, array $image_refs,
         // find a relevant image_ref, then download the image and replace the fid
         foreach ($image_refs as $image_ref) {
           if ($image['fid'] == $image_ref['fid']) {
-            $new_img = download_image($image_ref['uri']);
+            $new_img = download_image($image_ref['uri'], TRUE);
             if ($new_img !== FALSE) {
               $image['fid'] = $new_img['fid'];
               $image['uri'] = $new_img['uri'];
