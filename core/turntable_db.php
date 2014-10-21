@@ -292,6 +292,7 @@ SQL;
 SELECT nid
 FROM $table
 WHERE shared_state = 3 AND last_sync IS NULL
+ORDER BY nid DESC
 LIMIT $limit;
 SQL;
 
