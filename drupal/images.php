@@ -3,6 +3,7 @@ require_once './sites/all/libraries/turntable/core/util.php';
 
 /**
  * Ensures that the image at $image_dir_uri .
+ *
  * $fname is available. If it is not
  * available, it is made available by downloading the image from $img_url.
  *
@@ -89,6 +90,8 @@ function download_image($original_image_url, $add_to_db = FALSE) {
 function get_image_url($image) {
   if (isset($image['uri'])) {
     $uri = $image['uri'];
+  } else if ($image['fid'] == NULL) {
+    return FALSE;
   } else {
     $file = file_load($image['fid']);
     $uri = $file->uri;
