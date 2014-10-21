@@ -537,8 +537,11 @@ SQL;
     $sql_cond = '';
     for($i = 0; $i < $num_of_terms; ++ $i) {
       $term = $search_terms[$i];
-      $esc_term = $this->connection->real_escape_string($term);
-      $sql_cond .= '  AND body.body_value LIKE \'%' . $esc_term . '%\'' . "\n";
+      // use json encoding (required for correctly finding json utf8 encoded chars)
+      $enc_term = json_encode($term);
+      $enc_term = substr($enc_term, 1, strlen($enc_term) - 2);
+      $esc_term = $this->connection->real_escape_string($enc_term);
+      $sql_cond .= '  AND body.body_value LIKE \'%' . addcslashes($esc_term, '\\') . '%\'' . "\n";
     }
 
     $sql = <<<SQL
