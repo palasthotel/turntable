@@ -2,12 +2,16 @@
 require_once './sites/all/libraries/turntable/core/util.php';
 
 /**
- * Ensures that the image at $image_dir_uri . $fname is available. If it is not
+ * Ensures that the image at $image_dir_uri .
+ * $fname is available. If it is not
  * available, it is made available by downloading the image from $img_url.
  *
- * @param string $image_dir_uri uri of the image directory
- * @param string $fname name of the image file
- * @param string $img_url url of the image
+ * @param string $image_dir_uri
+ *          uri of the image directory
+ * @param string $fname
+ *          name of the image file
+ * @param string $img_url
+ *          url of the image
  * @return array finfo including fid
  */
 function ensure_image_is_available($image_dir_uri, $fname, $img_url,
@@ -20,7 +24,7 @@ function ensure_image_is_available($image_dir_uri, $fname, $img_url,
     // retrieve its file id
     $finfo = reset(
         file_load_multiple(array(), array(
-            'uri' => $local_uri
+          'uri' => $local_uri
         )));
 
     if ($finfo) {
@@ -30,6 +34,9 @@ function ensure_image_is_available($image_dir_uri, $fname, $img_url,
   }
 
   if ($info === FALSE || !isset($info['fid'])) {
+    // if the image is either non-existent or a corresponding file id could not
+    // be found -> download it
+
     // prepare the directory
     if (!file_prepare_directory($image_dir_uri, FILE_CREATE_DIRECTORY)) {
       return array(
@@ -48,18 +55,7 @@ function ensure_image_is_available($image_dir_uri, $fname, $img_url,
 
     $img_info = getimagesize($local_uri);
 
-    // if ($add_to_db) {
-    // $entity_type = 'image';
-    // $entity = entity_create($entity_type, array());
-
-    // // set meta data
-    // $ewrapper = entity_metadata_wrapper($entity_type, $entity);
-    // $ewrapper->field_image_fid->set($finfo->fid);
-    // $ewrapper->field_image_width->set($img_info[0]);
-    // $ewrapper->field_image_height->set($img_info[1]);
-    // $ewrapper->save();
-    // }
-
+    // collect some information
     $info = array(
       'fid' => $finfo->fid,
       'uri' => $local_uri,
