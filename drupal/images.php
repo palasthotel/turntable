@@ -4,6 +4,8 @@ require_once './sites/all/libraries/turntable/core/util.php';
 /**
  * Ensures that the image at $image_dir_uri .
  *
+ *
+ *
  * $fname is available. If it is not
  * available, it is made available by downloading the image from $img_url.
  *
@@ -54,25 +56,33 @@ function ensure_image_is_available($image_dir_uri, $fname, $img_url,
       );
     }
 
-    $img_info = getimagesize($local_uri);
+    if (!$add_to_db) {
+      // unmanaged
+      $info = image_get_info($finfo);
 
-    // collect some information
-    $info = array(
-      'fid' => $finfo->fid,
-      'uri' => $local_uri,
-      'width' => $img_info[0],
-      'height' => $img_info[1],
-      'extension' => pathinfo($finfo->filename, PATHINFO_EXTENSION),
-      'mime_type' => $finfo->filemime,
-      'file_size' => $finfo->filesize
-    );
+      $info['uri'] = $local_uri;
+    } else {
+      // managed
+      $img_info = getimagesize($local_uri);
+
+      // collect some information
+      $info = array(
+        'fid' => $finfo->fid,
+        'uri' => $local_uri,
+        'width' => $img_info[0],
+        'height' => $img_info[1],
+        'extension' => pathinfo($finfo->filename, PATHINFO_EXTENSION),
+        'mime_type' => $finfo->filemime,
+        'file_size' => $finfo->filesize
+      );
+    }
   }
 
   return $info;
 }
 
 function download_image($original_image_url, $add_to_db = FALSE) {
-  $dir = 'public://turntable_files/';
+  $dir = 'public://turntable/';
   $fname = url_to_filename($original_image_url);
 
   $turntable_client = turntable_client::getInstance();
