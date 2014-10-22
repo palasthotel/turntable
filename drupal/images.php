@@ -6,6 +6,7 @@ require_once './sites/all/libraries/turntable/core/util.php';
  *
  *
  *
+ *
  * $fname is available. If it is not
  * available, it is made available by downloading the image from $img_url.
  *
@@ -122,7 +123,7 @@ function get_image_url($image) {
  *          whether to show messages or not
  * @return boolean success
  */
-function resolve_image_references($ewrapper, array $image_refs,
+function resolve_image_references($ewrapper, &$image_refs,
     $show_messages = FALSE) {
   try {
     $info = $ewrapper->getPropertyInfo();
@@ -149,11 +150,12 @@ function resolve_image_references($ewrapper, array $image_refs,
       // track if something changed
       $change = FALSE;
       // find a relevant image_ref, then download the image and replace the fid
-      foreach ($image_refs as $image_ref) {
+      foreach ($image_refs as &$image_ref) {
         if ($image['fid'] == $image_ref['fid']) {
           $new_img = download_image($image_ref['uri'], TRUE);
           if ($new_img !== FALSE) {
             $image['fid'] = $new_img['fid'];
+            $image_ref['new_fid'] = $new_img['fid'];
             $image['uri'] = $new_img['uri'];
             $change = TRUE;
           } else {
@@ -178,11 +180,12 @@ function resolve_image_references($ewrapper, array $image_refs,
 
       foreach ($images as &$image) {
         // find a relevant image_ref, then download the image and replace the fid
-        foreach ($image_refs as $image_ref) {
+        foreach ($image_refs as &$image_ref) {
           if ($image['fid'] == $image_ref['fid']) {
             $new_img = download_image($image_ref['uri'], TRUE);
             if ($new_img !== FALSE) {
               $image['fid'] = $new_img['fid'];
+              $image_ref['new_fid'] = $new_img['fid'];
               $image['uri'] = $new_img['uri'];
               $change = TRUE;
             } else {
