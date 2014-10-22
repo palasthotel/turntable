@@ -36,7 +36,7 @@ function ensure_image_is_available($image_dir_uri, $fname, $img_url,
     }
   }
 
-  if ($info === FALSE || !isset($info['fid'])) {
+  if ($info === FALSE || ($add_to_db && !isset($info['fid']))) {
     // if the image is either non-existent or a corresponding file id could not
     // be found -> download it
 
