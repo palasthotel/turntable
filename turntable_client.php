@@ -137,6 +137,7 @@ class turntable_client {
   }
 
   public function getImageURL($original_url) {
-    return $this->master_url . self::ENDPOINT_IMAGE . '?url=' . $original_url;
+    return $this->master_url . self::ENDPOINT_IMAGE . '?url=' . $original_url .
+         '&client_id=' . $this->client_id;
   }
 }
