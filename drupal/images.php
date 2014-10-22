@@ -82,10 +82,13 @@ function ensure_image_is_available($image_dir_uri, $fname, $img_url,
 }
 
 function download_image($original_image_url, $add_to_db = FALSE) {
+  global $base_url;
+
   $dir = 'public://turntable/';
   $fname = url_to_filename($original_image_url);
 
   $turntable_client = turntable_client::getInstance();
+  $turntable_client->setClientID(variable_get('turntable_client_id', $base_url));
   $master_url = $turntable_client->getImageURL($original_image_url);
 
   $info = ensure_image_is_available($dir, $fname, $master_url, $add_to_db);
