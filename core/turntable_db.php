@@ -475,10 +475,11 @@ SQL;
     $client_id = $shared_node['client_id'];
     $client_nid = $shared_node['node_id'];
 
+    // optional revision id
     if (isset($shared_node['revision_uid'])) {
       $client_vid = $shared_node['revision_uid'];
     } else {
-      $client_vid = $nid;
+      $client_vid = $client_nid;
     }
 
     $client_type = $shared_node['content_type'];
