@@ -474,7 +474,13 @@ SQL;
     $nid = $shared_node['nid'];
     $client_id = $shared_node['client_id'];
     $client_nid = $shared_node['node_id'];
-    $client_vid = $shared_node['revision_uid'];
+
+    if (isset($shared_node['revision_uid'])) {
+      $client_vid = $shared_node['revision_uid'];
+    } else {
+      $client_vid = $nid;
+    }
+
     $client_type = $shared_node['content_type'];
     $client_user_name = $shared_node['user_name'];
     $client_author_name = $shared_node['author_name'];
@@ -542,7 +548,8 @@ SQL;
       $enc_term = json_encode($term);
       $enc_term = substr($enc_term, 1, strlen($enc_term) - 2);
       $esc_term = $this->connection->real_escape_string($enc_term);
-      $sql_cond .= '  AND body.body_value LIKE \'%' . addcslashes($esc_term, '\\') . '%\'' . "\n";
+      $sql_cond .= '  AND body.body_value LIKE \'%' .
+           addcslashes($esc_term, '\\') . '%\'' . "\n";
     }
 
     $sql = <<<SQL
