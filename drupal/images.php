@@ -131,6 +131,8 @@ function resolve_image_references($ewrapper, &$image_refs,
     return FALSE;
   }
 
+  $missing_images = FALSE;
+
   // walk fields
   foreach ($info as $field => $field_properties) {
     $is_list = FALSE;
@@ -160,6 +162,7 @@ function resolve_image_references($ewrapper, &$image_refs,
             }
             // Don't stop if an image could not be downloaded
             // return FALSE;
+            $missing_images = TRUE;
           }
         }
       }
@@ -192,6 +195,7 @@ function resolve_image_references($ewrapper, &$image_refs,
               }
               // Don't stop if an image could not be downloaded
               // return FALSE;
+              $missing_images = TRUE;
             }
           }
         }
@@ -202,6 +206,10 @@ function resolve_image_references($ewrapper, &$image_refs,
         $ewrapper->$field->set($images);
       }
     }
+  }
+
+  if ($missing_images) {
+    return 'missing_images';
   }
 
   return TRUE;
