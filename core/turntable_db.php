@@ -138,7 +138,13 @@ class turntable_db_client extends turntable_db {
     $original_client_id = $shared_node->client_id;
     $original_client_nid = $shared_node->client_nid;
     $original_client_vid = $shared_node->revision_uid;
-    $last_sync = date('Y-m-d H:i:s', $shared_node->last_sync->getTimestamp());
+
+    if (isset($shared_node->last_sync)) {
+      $last_sync = "'" .
+           date('Y-m-d H:i:s', $shared_node->last_sync->getTimestamp()) . "'";
+    } else {
+      $last_sync = 'NULL';
+    }
 
     $sql = <<<SQL
 INSERT INTO $table
@@ -146,7 +152,7 @@ INSERT INTO $table
     last_sync)
 VALUES
   ($nid, $shared_state, $master_node_id, '$original_client_id',
-     '$original_client_nid', '$original_client_vid', '$last_sync');
+     '$original_client_nid', '$original_client_vid', $last_sync);
 SQL;
 
     $res = $this->connection->query($sql);
