@@ -2,13 +2,9 @@
 require_once './sites/all/libraries/turntable/core/util.php';
 
 /**
- * Ensures that the image at $image_dir_uri .
- *
- *
- *
- *
- * $fname is available. If it is not
- * available, it is made available by downloading the image from $img_url.
+ * Ensures that the image at $image_dir_uri/$fname is available.
+ * If it is not available, it is made available by downloading the image from
+ * $img_url.
  *
  * @param string $image_dir_uri
  *          uri of the image directory
