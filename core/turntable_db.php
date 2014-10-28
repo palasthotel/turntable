@@ -211,12 +211,16 @@ SQL;
   public function setSharedLastSync($nid, $last_sync) {
     $table = $this->prefix . self::TABLE_NODE_SHARED;
 
-    $last_sync = date('Y-m-d H:i:s', $last_sync);
+    if ($last_sync !== NULL) {
+      $last_sync = "'" . date('Y-m-d H:i:s', $last_sync) . "'";
+    } else {
+      $last_sync = 'NULL';
+    }
 
     $sql = <<<SQL
 UPDATE $table
 SET
-  last_sync='$last_sync'
+  last_sync=$last_sync
 WHERE
   nid=$nid;
 SQL;
