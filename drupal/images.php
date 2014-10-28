@@ -158,10 +158,12 @@ function resolve_image_references($ewrapper, &$image_refs,
             if ($show_messages) {
               drupal_set_message(t('Could not download an image.'), 'warning');
             }
-            return FALSE;
+            // Don't stop if an image could not be downloaded
+            // return FALSE;
           }
         }
       }
+
       if ($change) {
         // if something changed, save the changes
         $ewrapper->$field->set($image);
@@ -186,9 +188,10 @@ function resolve_image_references($ewrapper, &$image_refs,
               $change = TRUE;
             } else {
               if ($show_messages) {
-                drupal_set_message(t('Could not download an image.'), 'error');
+                drupal_set_message(t('Could not download an image.'), 'warning');
               }
-              return FALSE;
+              // Don't stop if an image could not be downloaded
+              // return FALSE;
             }
           }
         }
