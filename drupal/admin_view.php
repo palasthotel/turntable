@@ -1,19 +1,28 @@
 <?php
 
 function _get_admin_view($is_master = FALSE) {
+  $term = variable_get('turntable_term', 'Turntable');
+
   $view = new view();
   $view->name = 'turntable_content_admin';
   $view->description = '';
   $view->tag = 'default';
   $view->base_table = 'node';
-  $view->human_name = 'Turntable Content Administration';
+  $view->human_name = t('@turntable Administration',
+      array(
+        '@turntable' => $term
+      ));
   $view->core = 7;
   $view->api_version = '3.0';
   $view->disabled = FALSE;
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'Turntable Content Administration';
+  $handler->display->display_options['title'] = t(
+      '@turntable Content Administration',
+      array(
+        '@turntable' => $term
+      ));
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['access']['type'] = 'perm';
   $handler->display->display_options['access']['perm'] = 'administer nodes';
@@ -112,6 +121,9 @@ function _get_admin_view($is_master = FALSE) {
     $handler->display->display_options['filters']['type']['value'] = array(
       'shared' => 'shared'
     );
+  } else {
+    /* Content sharing filter. */
+    $handler->display->display_options['filters']['type']['handler'] = 'turntable_client_views_content_filter';
   }
   /* Filter criterion: Search: Search Terms */
   $handler->display->display_options['filters']['keys']['id'] = 'keys';
@@ -132,7 +144,10 @@ function _get_admin_view($is_master = FALSE) {
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['path'] = 'admin/content/turntable-manager';
   $handler->display->display_options['menu']['type'] = 'tab';
-  $handler->display->display_options['menu']['title'] = 'Turntable Manager';
+  $handler->display->display_options['menu']['title'] = t('@turntable Manager',
+      array(
+        '@turntable' => $term
+      ));
   $handler->display->display_options['menu']['description'] = 'Manage shared content';
   $handler->display->display_options['menu']['weight'] = '0';
   $handler->display->display_options['menu']['name'] = 'management';
