@@ -130,6 +130,6 @@ function _get_admin_view($is_master = FALSE) {
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
-  $handler->display->display_options['path'] = 'admin/turntable-content';
+  $handler->display->display_options['path'] = 'admin/content/turntable-manager';
   return $view;
 }
