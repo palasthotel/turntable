@@ -9,9 +9,9 @@ function _get_admin_view($is_master = FALSE) {
   $view->human_name = 'Turntable Content Administration';
   $view->core = 7;
   $view->api_version = '3.0';
-  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+  $view->disabled = FALSE;
 
-  // Display: Master
+  /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
   $handler->display->display_options['title'] = 'Turntable Content Administration';
   $handler->display->display_options['use_more_always'] = FALSE;
