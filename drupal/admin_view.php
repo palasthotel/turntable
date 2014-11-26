@@ -4,7 +4,7 @@ function _get_admin_view($is_master = FALSE) {
   $term = variable_get('turntable_term', 'Turntable');
 
   $view = new view();
-  $view->name = 'turntable_content_admin';
+  $view->name = 'turntable_admin';
   $view->description = '';
   $view->tag = 'default';
   $view->base_table = 'node';
@@ -183,7 +183,7 @@ function _get_admin_view($is_master = FALSE) {
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['path'] = 'admin/content/turntable-admin';
   $handler->display->display_options['menu']['type'] = 'tab';
-  $handler->display->display_options['menu']['title'] = t('@turntable Manager',
+  $handler->display->display_options['menu']['title'] = t('@turntable Admin',
       array(
         '@turntable' => $term
       ));
