@@ -47,7 +47,7 @@ function _get_admin_view($is_master = FALSE) {
       'title' => 'title',
       'path' => 'path',
       'client_id' => 'client_id',
-      'client_user_name' => 'client_user_name',
+      'client_author_name' => 'client_author_name',
       'edit_node' => 'edit_node',
       'delete_node' => 'delete_node'
     );
@@ -126,6 +126,13 @@ function _get_admin_view($is_master = FALSE) {
         'empty_column' => 0
       ),
       'client_id' => array(
+        'sortable' => 1,
+        'default_sort_order' => 'asc',
+        'align' => '',
+        'separator' => '',
+        'empty_column' => 0
+      ),
+      'client_author_name' => array(
         'sortable' => 1,
         'default_sort_order' => 'asc',
         'align' => '',
