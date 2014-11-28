@@ -179,7 +179,7 @@ function _get_admin_view($is_master = FALSE) {
     $handler->display->display_options['fields']['client_id']['id'] = 'client_id';
     $handler->display->display_options['fields']['client_id']['table'] = 'tt_master_node_shared';
     $handler->display->display_options['fields']['client_id']['field'] = 'client_id';
-    /* Field: Shared Content: Origin */
+    /* Field: Shared Content: Original author */
     $handler->display->display_options['fields']['client_author_name']['id'] = 'client_author_name';
     $handler->display->display_options['fields']['client_author_name']['table'] = 'tt_master_node_shared';
     $handler->display->display_options['fields']['client_author_name']['field'] = 'client_author_name';
