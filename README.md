@@ -20,6 +20,7 @@ original node's changes. Copies won't ever be changed.
 On every client, these Drupal modules have to be installed and enabled first:
 
  1. [entity]
+ 2. [views]
 
 On the master, these Drupal modules need to be installed and enabled:
 
@@ -28,11 +29,13 @@ On the master, these Drupal modules need to be installed and enabled:
  3. [libraries]
  4. [services]
       - only the REST Server needs to be enabled
+ 5. [views]
 
 [ctools]: https://www.drupal.org/project/ctools
 [entity]: https://www.drupal.org/project/entity
 [libraries]: https://www.drupal.org/project/libraries
 [services]: https://www.drupal.org/project/services
+[views]: https://www.drupal.org/project/views
 
 ### Installation
 
