@@ -17,7 +17,7 @@ function _get_admin_view($is_master = FALSE) {
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
 
   /* Display: Master */
-                    $handler = $view->new_display('default', 'Master', 'default');
+                      $handler = $view->new_display('default', 'Master', 'default');
   $handler->display->display_options['title'] = t('@turntable Admin',
       array(
         '@turntable' => $term
@@ -55,6 +55,13 @@ function _get_admin_view($is_master = FALSE) {
   $handler->display->display_options['style_options']['default'] = 'last_sync';
   if (!$is_master) {
     $handler->display->display_options['style_options']['info'] = array(
+      'nid' => array(
+        'sortable' => 1,
+        'default_sort_order' => 'desc',
+        'align' => '',
+        'separator' => '',
+        'empty_column' => 0
+      ),
       'title' => array(
         'sortable' => 1,
         'default_sort_order' => 'asc',
@@ -106,6 +113,13 @@ function _get_admin_view($is_master = FALSE) {
     );
   } else {
     $handler->display->display_options['style_options']['info'] = array(
+      'nid' => array(
+        'sortable' => 1,
+        'default_sort_order' => 'desc',
+        'align' => '',
+        'separator' => '',
+        'empty_column' => 0
+      ),
       'title' => array(
         'sortable' => 1,
         'default_sort_order' => 'asc',
