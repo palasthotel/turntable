@@ -209,12 +209,6 @@ function _get_admin_view($is_master = FALSE) {
     $handler->display->display_options['fields']['edit_tt_settings']['field'] = 'edit_tt_settings';
   }
 
-  /* Sort criterion: Search: Relevance */
-  $handler->display->display_options['sorts']['search_api_relevance']['id'] = 'search_api_relevance';
-  $handler->display->display_options['sorts']['search_api_relevance']['table'] = 'search_api_index_nodes';
-  $handler->display->display_options['sorts']['search_api_relevance']['field'] = 'search_api_relevance';
-  $handler->display->display_options['sorts']['search_api_relevance']['order'] = 'DESC';
-
   /* Sort criterion: Content: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
