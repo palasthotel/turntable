@@ -564,7 +564,7 @@ SQL;
     }
 
     $sql = <<<SQL
-SELECT node.nid, node.title, ns.client_id, ns.client_author_name as author, ns.last_sync
+SELECT node.nid, node.title, ns.client_id, ns.client_type as content_type, ns.client_author_name as author, ns.last_sync
 FROM $table as ns, node, field_data_body as body
 WHERE node.nid=ns.nid
   AND node.nid=body.entity_id
