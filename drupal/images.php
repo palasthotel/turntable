@@ -45,7 +45,7 @@ function ensure_image_is_available($image_dir_uri, $fname, $img_url,
     }
 
     // download the file
-    $finfo = system_retrieve_file($img_url, $local_uri, $add_to_db,
+    $finfo = system_retrieve_file_watchdog($img_url, $local_uri, $add_to_db,
         FILE_EXISTS_REPLACE);
     if ($finfo === FALSE) {
       return array(
@@ -76,6 +76,43 @@ function ensure_image_is_available($image_dir_uri, $fname, $img_url,
   }
 
   return $info;
+}
+
+function system_retrieve_file_watchdog($url, $destination = NULL, $managed = FALSE,
+    $replace = FILE_EXISTS_RENAME) {
+  $parsed_url = parse_url($url);
+  if (!isset($destination)) {
+    $path = file_build_uri(drupal_basename($parsed_url['path']));
+  } else {
+    if (is_dir(drupal_realpath($destination))) {
+      // Prevent URIs with triple slashes when glueing parts together.
+      $path = str_replace('///', '//', "$destination/") .
+           drupal_basename($parsed_url['path']);
+    } else {
+      $path = $destination;
+    }
+  }
+  $result = drupal_http_request($url);
+  if ($result->code != 200) {
+    watchdog('turntable',
+        'HTTP error @errorcode occurred when trying to fetch @remote.',
+        array(
+          '@errorcode' => $result->code,
+          '@remote' => $url
+        ), WATCHDOG_WARNING);
+    return FALSE;
+  }
+  $local = $managed ? file_save_data($result->data, $path, $replace) : file_unmanaged_save_data(
+      $result->data, $path, $replace);
+  if (!$local) {
+    watchdog('turntable', '@remote could not be saved to @path.',
+        array(
+          '@remote' => $url,
+          '@path' => $path
+        ), WATCHDOG_WARNING);
+  }
+
+  return $local;
 }
 
 function download_image($original_image_url, $add_to_db = FALSE) {
