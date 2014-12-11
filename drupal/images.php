@@ -93,7 +93,7 @@ function system_retrieve_file_watchdog($url, $destination = NULL, $managed = FAL
     }
   }
   $result = drupal_http_request($url);
-  if ($result->code != 200) {
+  if ($result->code != 200 && $result->code != 404 && $result->code !== 0) {
     watchdog('turntable',
         'HTTP error @errorcode occurred when trying to fetch @remote.',
         array(
