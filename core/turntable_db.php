@@ -319,6 +319,18 @@ SQL;
 
     return $nids;
   }
+
+  public function resetRemainingSharedNodes() {
+    $table = $this->prefix . self::TABLE_NODE_SHARED;
+
+    $sql = <<<SQL
+UPDATE $table
+SET last_sync = NULL
+WHERE shared_state = 3;
+SQL;
+
+    $this->connection->query($sql);
+  }
 }
 
 /**
